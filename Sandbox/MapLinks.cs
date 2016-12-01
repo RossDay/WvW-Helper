@@ -90,16 +90,26 @@ namespace Sandbox
             return _WaypointLinks[map][Team];
         }
 
-        public String GetLeftSpawn()
+        public String GetLeftMapColor()
         {
             var teams = new String[] { "Red", "Green", "Blue" };
-            return GetSpawn(teams[(Array.IndexOf(teams, Team) - 1 + teams.Length) % teams.Length]);
+            return teams[(Array.IndexOf(teams, Team) - 1 + teams.Length) % teams.Length];
+        }
+
+        public String GetLeftSpawn()
+        {
+            return GetSpawn(GetLeftMapColor());
+        }
+
+        public String GetRightMapColor()
+        {
+            var teams = new String[] { "Red", "Green", "Blue" };
+            return teams[(Array.IndexOf(teams, Team) + 1) % teams.Length];
         }
 
         public String GetRightSpawn()
         {
-            var teams = new String[] { "Red", "Green", "Blue" };
-            return GetSpawn(teams[(Array.IndexOf(teams, Team) + 1) % teams.Length]);
+            return GetSpawn(GetRightMapColor());
         }
     }
 }

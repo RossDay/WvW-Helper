@@ -1,0 +1,936 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GW2NET</name>
+    </assembly>
+    <members>
+        <member name="T:GW2NET.Factories.BinarySerializerFactory">
+            <summary>Provides factory methods for the binary serialization engine.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.BinarySerializerFactory.GetSerializer``1">
+            <summary>Gets a serializer for the specified type.</summary>
+            <typeparam name="T">The serialization type.</typeparam>
+            <returns>The <see cref="T:GW2NET.Common.Serializers.ISerializer`1"/>.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.DataContractJsonSerializerFactory">
+            <summary>Provides factory methods for the JSON data contract serialization engine.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.DataContractJsonSerializerFactory.GetSerializer``1">
+            <summary>Gets a serializer for the specified type.</summary>
+            <typeparam name="T">The serialization type.</typeparam>
+            <returns>The <see cref="T:GW2NET.Common.Serializers.ISerializer`1"/>.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.FactoryBase">
+            <summary>Provides access to the Guild Wars 2 service.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.FactoryBase.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.FactoryBase"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.FactoryBase.ServiceClient">
+            <summary>Gets an instance of a service client.</summary>
+        </member>
+        <member name="T:GW2NET.Factories.FactoryForLocal">
+            <summary>Provides access to specialty services that do not require a network connection.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.FactoryForLocal.EventRotations">
+            <summary>Gets access to event rotations data.</summary>
+        </member>
+        <member name="T:GW2NET.Factories.FactoryForRendering">
+            <summary>Provides access to the rendering service.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.FactoryForRendering.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.FactoryForRendering"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.FactoryForRendering.RenderService">
+            <summary>Gets access to the rendering service.</summary>
+        </member>
+        <member name="T:GW2NET.Factories.RepositoryFactoryBase`1">
+            <summary>Provides methods for creating repository objects.</summary>
+            <typeparam name="TRepository">The type of repository to create.</typeparam>
+        </member>
+        <member name="P:GW2NET.Factories.RepositoryFactoryBase`1.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="language"/> is a null reference.</exception>
+            <exception cref="T:System.ArgumentException">The length of <paramref name="language"/> is not 2.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.RepositoryFactoryBase`1.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="culture"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.RepositoryFactoryBase`1.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.RepositoryFactoryBase`1.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="culture"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.RepositoryFactoryBase`1.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.RepositoryFactoryBase`1.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.ColorRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ColorRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.ColorRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V1.ColorRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="language"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.ColorRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="culture"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ColorRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ColorRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ColorRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ColorRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.ContinentRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ContinentRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.ContinentRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V1.ContinentRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="language"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.ContinentRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="culture"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ContinentRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ContinentRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ContinentRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ContinentRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.EventNameRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.EventNameRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.EventNameRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V1.EventNameRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <returns>A repository.</returns>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="language"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V1.EventNameRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="culture"/> is a null reference.</exception>
+        </member>
+        <member name="M:GW2NET.Factories.V1.EventNameRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.EventNameRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.EventNameRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.EventNameRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.EventRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.EventRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.EventRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V1.EventRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="language"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.EventRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="culture"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.EventRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.EventRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.EventRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.EventRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.FactoryForV1">
+            <summary>Provides access to version 1 of the public API.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.FactoryForV1.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.FactoryForV1"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Builds">
+            <summary>Gets access to the builds data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Colors">
+            <summary>Gets access to the colors data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Continents">
+            <summary>Gets access to the continents data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.EventNames">
+            <summary>Gets access to the event names data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Events">
+            <summary>Gets access to the events data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Files">
+            <summary>Gets access to the files data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Floors">
+            <summary>Gets access to the floors data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Guilds">
+            <summary>Gets access to the guilds data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Items">
+            <summary>Gets access to the items data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.MapNames">
+            <summary>Gets access to the map names data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Maps">
+            <summary>Gets access to the maps data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Recipes">
+            <summary>Gets access to the recipes data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Skins">
+            <summary>Gets access to the skins data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.Worlds">
+            <summary>Gets access to the worlds data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1.WorldVersusWorld">
+            <summary>Gets access to world versus world data sources.</summary>
+        </member>
+        <member name="T:GW2NET.Factories.V1.FactoryForV1WvW">
+            <summary>Provides access to world versus world data sources.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.FactoryForV1WvW.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.FactoryForV1WvW"/> class. Initializes a new instance of the <see cref="T:GW2NET.Factories.FactoryBase"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1WvW.Matches">
+            <summary>Gets access to the matches data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FactoryForV1WvW.Objectives">
+            <summary>Gets access to the objective names data source.</summary>
+        </member>
+        <member name="T:GW2NET.Factories.V1.FloorRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.FloorRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.FloorRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FloorRepositoryFactory.Item(System.Int32)">
+            <summary>Creates an instance for the default language.</summary>
+            <param name="continentId">The continent identifier.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FloorRepositoryFactory.Item(System.Int32,System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="continentId">The continent identifier.</param>
+            <param name="language">The two-letter language code.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="language"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.FloorRepositoryFactory.Item(System.Int32,System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="continentId">The continent identifier.</param>
+            <param name="culture">The culture.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="culture"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.FloorRepositoryFactory.ForDefaultCulture(System.Int32)">
+            <summary>Creates an instance for the default language.</summary>
+            <param name="continentId">The continent identifier.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.FloorRepositoryFactory.ForCulture(System.Int32,System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="continentId">The continent identifier.</param>
+            <param name="culture">The culture.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="culture"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.FloorRepositoryFactory.ForCurrentCulture(System.Int32)">
+            <summary>Creates an instance for the current system language.</summary>
+            <param name="continentId">The continent identifier.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.FloorRepositoryFactory.ForCurrentUICulture(System.Int32)">
+            <summary>Creates an instance for the current UI language.</summary>
+            <param name="continentId">The continent identifier.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.ItemRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ItemRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.ItemRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V1.ItemRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="language"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.ItemRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="culture"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ItemRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ItemRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ItemRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ItemRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.MapNameRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.MapNameRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.MapNameRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+        </member>
+        <member name="P:GW2NET.Factories.V1.MapNameRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.MapNameRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.MapNameRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.MapNameRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.MapNameRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.MapNameRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.MapRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.MapRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.MapRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+        </member>
+        <member name="P:GW2NET.Factories.V1.MapRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.MapRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.MapRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.MapRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.MapRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.MapRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.ObjectiveNameRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ObjectiveNameRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.ObjectiveNameRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+        </member>
+        <member name="P:GW2NET.Factories.V1.ObjectiveNameRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.ObjectiveNameRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ObjectiveNameRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ObjectiveNameRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ObjectiveNameRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.ObjectiveNameRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.RecipeRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.RecipeRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.RecipeRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+        </member>
+        <member name="P:GW2NET.Factories.V1.RecipeRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.RecipeRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.RecipeRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.RecipeRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.RecipeRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.RecipeRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.SkinRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.SkinRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.SkinRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+        </member>
+        <member name="P:GW2NET.Factories.V1.SkinRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.SkinRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.SkinRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.SkinRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.SkinRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.SkinRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V1.WorldRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V1.WorldRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V1.WorldRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+        </member>
+        <member name="P:GW2NET.Factories.V1.WorldRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V1.WorldRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.WorldRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.WorldRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.WorldRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V1.WorldRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V2.AccountRepositoryFactory">
+            <summary>Provides methods and properties for creating an account repository.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.AccountRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.AccountRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the service client is null.</exception>
+        </member>
+        <member name="M:GW2NET.Factories.V2.AccountRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.AccountRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="culture"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V2.CharacterRepositoryFactory">
+            <summary>Provides methods and properties for creating a character repository.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.CharacterRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.CharacterRepositoryFactory"/> class.
+            </summary>
+            <param name="serviceClient">
+            The service client.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when the reference to the service client is null.
+            </exception>
+        </member>
+        <member name="M:GW2NET.Factories.V2.CharacterRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.CharacterRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>
+            Creates an instance for the given language.
+            </summary>
+            <param name="culture">
+            The culture.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            The value of <paramref name="culture"/> is a null reference.
+            </exception>
+            <returns>
+            A repository.
+            </returns>
+        </member>
+        <member name="T:GW2NET.Factories.V2.ColorRepositoryFactory">
+            <summary>Provides methods and properties for creating a color repository.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ColorRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.ColorRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ColorRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ColorRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V2.ContinentRepositoryFactory">
+            <summary>Provides methods for creating a continent repository.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ContinentRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.ContinentRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ContinentRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ContinentRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="culture"/> is a null reference.</exception>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V2.FactoryForV2WvW">
+            <summary>Provides access to world versus world data sources.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.FactoryForV2WvW.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.FactoryForV2WvW"/> class. Initializes a new instance of the <see cref="T:GW2NET.Factories.FactoryBase"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2WvW.Matches">
+            <summary>Gets access to the matches data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2WvW.Objectives">
+            <summary>Gets access to the objective names data source.</summary>
+        </member>
+        <member name="T:GW2NET.Factories.V2.FactoryForV2">
+            <summary>Provides access to version 2 of the public API.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.FactoryForV2.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.FactoryForV2"/> class. Initializes a new instance of the <see cref="T:GW2NET.Factories.FactoryBase"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.Builds">
+            <summary>Gets access to the v2 build service.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.Colors">
+            <summary>Gets access to the colors data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.Commerce">
+            <summary>Gets access to commerce data sources.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.Continents">
+            <summary>Gets access to the continents data sources.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.Files">
+            <summary>Gets access to the files data sources.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.Items">
+            <summary>Gets access to the items data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.Maps">
+            <summary>Gets access to the maps data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.Quaggans">
+            <summary>Gets access to the Quaggans data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.Recipes">
+            <summary>Gets access to the recipe data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.Skins">
+            <summary>Gets access to the skins data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.Worlds">
+            <summary>Gets access to the worlds data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2.WorldVersusWorld">
+            <summary>Gets access to world versus world data sources.</summary>
+        </member>
+        <member name="T:GW2NET.Factories.V2.FactoryForV2Authorized">
+            <summary>Provides access to the authorized part of the version 2 API.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.FactoryForV2Authorized.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.FactoryForV2Authorized"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2Authorized.Accounts">
+            <summary>Gets access to the accounts endpoint.</summary>
+        </member>
+        <member name="T:GW2NET.Factories.V2.FactoryForV2Commerce">
+            <summary>Provides access to commerce data sources based on the /v2/ api.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.FactoryForV2Commerce.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.FactoryForV2Commerce"/> class. Initializes a new instance of the <see cref="T:GW2NET.Factories.FactoryBase"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2Commerce.Exchange">
+            <summary>Gets access to the gem exchange data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2Commerce.Listings">
+            <summary>Gets access to the listings data source.</summary>
+        </member>
+        <member name="P:GW2NET.Factories.V2.FactoryForV2Commerce.Prices">
+            <summary>Gets access to the aggregate listings data source.</summary>
+        </member>
+        <member name="T:GW2NET.Factories.V2.FileRepositoryFactory">
+            <summary>Provides methods for creating a file repository.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.FileRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.FileRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+        </member>
+        <member name="T:GW2NET.Factories.V2.ItemRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ItemRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.ItemRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ItemRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ItemRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V2.MapsRepositoryFactory">
+            <summary>Provides methods and properties for creating a map repository.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.MapsRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.MapsRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+        </member>
+        <member name="M:GW2NET.Factories.V2.MapsRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.MapsRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V2.ObjectiveNameRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ObjectiveNameRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.ObjectiveNameRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+        </member>
+        <member name="P:GW2NET.Factories.V2.ObjectiveNameRepositoryFactory.Item(System.String)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="language">The two-letter language code.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="P:GW2NET.Factories.V2.ObjectiveNameRepositoryFactory.Item(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ObjectiveNameRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ObjectiveNameRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ObjectiveNameRepositoryFactory.ForCurrentCulture">
+            <summary>Creates an instance for the current system language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.ObjectiveNameRepositoryFactory.ForCurrentUICulture">
+            <summary>Creates an instance for the current UI language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V2.RecipeRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.RecipeRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.RecipeRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="M:GW2NET.Factories.V2.RecipeRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.RecipeRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V2.SkinRepositoryFactory">
+            <summary>Provides methods and properties for creating a skin repository.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.SkinRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.SkinRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="M:GW2NET.Factories.V2.SkinRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.SkinRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.Factories.V2.WorldRepositoryFactory">
+            <summary>Provides methods for creating repository objects.</summary>
+        </member>
+        <member name="M:GW2NET.Factories.V2.WorldRepositoryFactory.#ctor(GW2NET.Common.IServiceClient)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.Factories.V2.WorldRepositoryFactory"/> class.</summary>
+            <param name="serviceClient"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> is a null reference.</exception>
+        </member>
+        <member name="M:GW2NET.Factories.V2.WorldRepositoryFactory.ForDefaultCulture">
+            <summary>Creates an instance for the default language.</summary>
+            <returns>A repository.</returns>
+        </member>
+        <member name="M:GW2NET.Factories.V2.WorldRepositoryFactory.ForCulture(System.Globalization.CultureInfo)">
+            <summary>Creates an instance for the given language.</summary>
+            <param name="culture">The culture.</param>
+            <returns>A repository.</returns>
+        </member>
+        <member name="T:GW2NET.GW2Bootstrapper">
+            <summary>Provides access to Guild Wars 2 data sources and services.</summary>
+        </member>
+        <member name="M:GW2NET.GW2Bootstrapper.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.GW2Bootstrapper"/> class.</summary>
+        </member>
+        <member name="M:GW2NET.GW2Bootstrapper.#ctor(System.String)">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.GW2Bootstrapper"/> class.</summary>
+            <param name="apiKey">The api key.</param>
+        </member>
+        <member name="P:GW2NET.GW2Bootstrapper.Local">
+            <summary>Gets access to specialty services that do not require a network connection.</summary>
+        </member>
+        <member name="P:GW2NET.GW2Bootstrapper.Rendering">
+            <summary>Gets access to the rendering service.</summary>
+        </member>
+        <member name="P:GW2NET.GW2Bootstrapper.V1">
+            <summary>Gets access to version 1 of the public API.</summary>
+        </member>
+        <member name="P:GW2NET.GW2Bootstrapper.V2">
+            <summary>Gets access to the public area of the version 2 of the Guild Wars 2 API.</summary>
+        </member>
+        <member name="P:GW2NET.GW2Bootstrapper.V2Authorized">
+            <summary> Gets access to the authorized area of the Guild Wars 2 API.</summary>
+        </member>
+        <member name="M:GW2NET.GW2Bootstrapper.SetApiKey(System.String)">
+            <summary>Sets the api key for further use.</summary>
+            <param name="apiKey">The api key.</param>
+        </member>
+        <member name="M:GW2NET.GW2Bootstrapper.CreateRenderingServiceClient">
+            <summary>Creates and configures an instance of the default service client.</summary>
+            <returns>The <see cref="T:GW2NET.Common.IServiceClient"/>.</returns>
+        </member>
+        <member name="M:GW2NET.GW2Bootstrapper.CreateServiceClient">
+            <summary>Creates and configures an instance of the default service client.</summary>
+            <returns>The <see cref="T:GW2NET.Common.IServiceClient"/>.</returns>
+        </member>
+        <member name="M:GW2NET.GW2Bootstrapper.CreateAuthorizedServiceClient(System.String)">
+            <summary>Creates and configures an instance of an authorized service client.</summary>
+            <param name="apiKey">The api key grating access to the authorized area.</param>
+            <returns>The <see cref="T:GW2NET.Common.IServiceClient"/>.</returns>
+        </member>
+        <member name="M:GW2NET.GW2Bootstrapper.GetRenderingUri">
+            <summary>Gets the base URI.</summary>
+            <returns>A <see cref="T:System.Uri"/>.</returns>
+        </member>
+        <member name="M:GW2NET.GW2Bootstrapper.GetRepositoryUri">
+            <summary>Gets the base URI.</summary>
+            <returns>A <see cref="T:System.Uri"/>.</returns>
+        </member>
+    </members>
+</doc>

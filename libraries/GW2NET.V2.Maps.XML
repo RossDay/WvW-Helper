@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GW2NET.V2.Maps</name>
+    </assembly>
+    <members>
+        <member name="T:GW2NET.V2.Maps.MapBulkRequest">
+            <summary>Represents a bulk request that targets the /v2/maps interface.</summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.MapBulkRequest.Culture">
+            <summary>Gets or sets the locale.</summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.MapBulkRequest.Resource">
+            <summary>Gets the resource path.</summary>
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapBulkRequest.GetParameters">
+            <summary>Gets the request parameters.</summary>
+            <returns>A collection of parameters.</returns>
+        </member>
+        <member name="T:GW2NET.V2.Maps.Converter.MapConverter">
+            <summary>Converts objects of type <see cref="T:GW2NET.V2.Maps.Json.MapDTO"/> to objects of type <see cref="T:GW2NET.Maps.Map"/>.</summary>
+        </member>
+        <member name="M:GW2NET.V2.Maps.Converter.MapConverter.#ctor(GW2NET.Common.IConverter{System.Double[][],GW2NET.Common.Drawing.Rectangle})">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.V2.Maps.Converter.MapConverter"/> class.</summary>
+            <param name="rectangleConverter">The converter for <see cref="T:GW2NET.Common.Drawing.Rectangle"/>.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="rectangleConverter"/> is a null reference.</exception>
+        </member>
+        <member name="M:GW2NET.V2.Maps.Converter.MapConverter.Convert(GW2NET.V2.Maps.Json.MapDTO,System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="T:GW2NET.V2.Maps.Converter.RectangleConverter">
+            <summary>Converts objects of type <see cref="T:double[][]"/> to objects of type <see cref="T:GW2NET.Common.Drawing.Rectangle"/>.</summary>
+        </member>
+        <member name="M:GW2NET.V2.Maps.Converter.RectangleConverter.#ctor(GW2NET.Common.IConverter{System.Double[],GW2NET.Common.Drawing.Vector2D})">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.V2.Maps.Converter.RectangleConverter"/> class.</summary>
+            <param name="vectorConverter">The vector converter.</param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="vectorConverter"/> is a null reference.</exception>
+        </member>
+        <member name="M:GW2NET.V2.Maps.Converter.RectangleConverter.Convert(System.Double[][],System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="T:GW2NET.V2.Maps.Converter.Vector2DConverter">
+            <summary>Converts objects of type <see cref="T:double[]"/> to objects of type <see cref="T:GW2NET.Common.Drawing.Vector2D"/>.</summary>
+        </member>
+        <member name="M:GW2NET.V2.Maps.Converter.Vector2DConverter.Convert(System.Double[],System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="T:GW2NET.V2.Maps.Json.MapDTO">
+            <summary>Defines the map data contract.</summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.Id">
+            <summary>
+            Gets or sets the id.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.MinimumLevel">
+            <summary>
+            Gets or sets the minimum level.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.MaximumLevel">
+            <summary>
+            Gets or sets the maximum level.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.TypeName">
+            <summary>
+            Gets or sets the map type.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.DefaultFloor">
+            <summary>
+            Gets or sets the default floor.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.Floors">
+            <summary>
+            Gets or sets the floors.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.RegionId">
+            <summary>
+            Gets or sets the region id.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.RegionName">
+            <summary>
+            Gets or sets the region name.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.ContinentId">
+            <summary>
+            Gets or sets the continent id.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.ContinentName">
+            <summary>
+            Gets or sets the continent name.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.MapRectangle">
+            <summary>
+            Gets or sets the map rectangle.
+            </summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.Json.MapDTO.ContinentRectangle">
+            <summary>
+            Gets or sets the continent rectangle.
+            </summary>
+        </member>
+        <member name="T:GW2NET.V2.Maps.MapDetailsRequest">
+            <summary>Represents a detail request that targets the /v2/maps interface.</summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.MapDetailsRequest.Culture">
+            <summary>Gets or sets the locale.</summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.MapDetailsRequest.Resource">
+            <summary>Gets the resource path.</summary>
+        </member>
+        <member name="T:GW2NET.V2.Maps.MapDiscoveryRequest">
+            <summary>Represents a discovery request that targets the /v2/maps interface.</summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.MapDiscoveryRequest.Resource">
+            <summary>Gets the resource path.</summary>
+        </member>
+        <member name="T:GW2NET.V2.Maps.MapPageRequest">
+            <summary>Represents a page request that targets the /v2/items interface.</summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.MapPageRequest.Culture">
+            <summary>Gets or sets the locale.</summary>
+        </member>
+        <member name="P:GW2NET.V2.Maps.MapPageRequest.Resource">
+            <summary>Gets the resource path.</summary>
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapPageRequest.GetParameters">
+            <summary>Gets the request parameters.</summary>
+            <returns>A collection of parameters.</returns>
+        </member>
+        <member name="T:GW2NET.V2.Maps.MapRepository">
+            <summary>Represents a repository that retrieves data from the /v2/items interface. See the remarks section for important limitations regarding this implementation.</summary>
+            <remarks>
+            This implementation does not retrieve associated entities.
+            </remarks>
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.#ctor(GW2NET.Common.IServiceClient,GW2NET.Common.IConverter{GW2NET.Common.IResponse{System.Collections.Generic.ICollection{System.Int32}},System.Collections.Generic.ICollection{System.Int32}},GW2NET.Common.IConverter{GW2NET.Common.IResponse{GW2NET.V2.Maps.Json.MapDTO},GW2NET.Maps.Map},GW2NET.Common.IConverter{GW2NET.Common.IResponse{System.Collections.Generic.ICollection{GW2NET.V2.Maps.Json.MapDTO}},GW2NET.Common.IDictionaryRange{System.Int32,GW2NET.Maps.Map}},GW2NET.Common.IConverter{GW2NET.Common.IResponse{System.Collections.Generic.ICollection{GW2NET.V2.Maps.Json.MapDTO}},GW2NET.Common.ICollectionPage{GW2NET.Maps.Map}})">
+            <summary>Initializes a new instance of the <see cref="T:GW2NET.V2.Maps.MapRepository"/> class.</summary>
+            <param name="serviceClient"></param>
+            <param name="identifiersResponseConverter"></param>
+            <param name="responseConverter"></param>
+            <param name="bulkResponseConverter"></param>
+            <param name="pageResponseConverter"></param>
+            <exception cref="T:System.ArgumentNullException">The value of <paramref name="serviceClient"/> or <paramref name="bulkResponseConverter"/> or <paramref name="responseConverter"/> is a null reference.</exception>
+        </member>
+        <member name="P:GW2NET.V2.Maps.MapRepository.GW2NET#Common#ILocalizable#Culture">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IDiscoverable{System#Int32}#Discover">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IDiscoverable{System#Int32}#DiscoverAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IDiscoverable{System#Int32}#DiscoverAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IRepository{System#Int32,GW2NET#Maps#Map}#Find(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IRepository{System#Int32,GW2NET#Maps#Map}#FindAll">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IRepository{System#Int32,GW2NET#Maps#Map}#FindAll(System.Collections.Generic.ICollection{System.Int32})">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IRepository{System#Int32,GW2NET#Maps#Map}#FindAllAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IRepository{System#Int32,GW2NET#Maps#Map}#FindAllAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IRepository{System#Int32,GW2NET#Maps#Map}#FindAllAsync(System.Collections.Generic.ICollection{System.Int32})">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IRepository{System#Int32,GW2NET#Maps#Map}#FindAllAsync(System.Collections.Generic.ICollection{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IRepository{System#Int32,GW2NET#Maps#Map}#FindAsync(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IRepository{System#Int32,GW2NET#Maps#Map}#FindAsync(System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IPaginator{GW2NET#Maps#Map}#FindPage(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IPaginator{GW2NET#Maps#Map}#FindPage(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IPaginator{GW2NET#Maps#Map}#FindPageAsync(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IPaginator{GW2NET#Maps#Map}#FindPageAsync(System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IPaginator{GW2NET#Maps#Map}#FindPageAsync(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:GW2NET.V2.Maps.MapRepository.GW2NET#Common#IPaginator{GW2NET#Maps#Map}#FindPageAsync(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

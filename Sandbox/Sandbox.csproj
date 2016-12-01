@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sandbox</RootNamespace>
     <AssemblyName>Sandbox</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,18 +35,38 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GW2NET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GW2NET.1.4.0\lib\portable-net45+win+wpa81\GW2NET.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libraries\GW2NET.dll</HintPath>
     </Reference>
-    <Reference Include="GW2NET.Core">
-      <HintPath>..\packages\GW2NET.Core.1.4.0\lib\portable-net45+win+wpa81\GW2NET.Core.dll</HintPath>
+    <Reference Include="GW2NET.Compression">
+      <HintPath>..\libraries\GW2NET.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="GW2NET.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libraries\GW2NET.Core.dll</HintPath>
     </Reference>
     <Reference Include="GW2NET.MumbleLink, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GW2NET.MumbleLink.1.4.0\lib\net452\GW2NET.MumbleLink.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libraries\GW2NET.MumbleLink.dll</HintPath>
     </Reference>
-    <Reference Include="GW2NET.V2.Maps">
-      <HintPath>..\packages\GW2NET.V2.Maps.1.4.0\lib\portable-net45+win+wpa81\GW2NET.V2.Maps.dll</HintPath>
+    <Reference Include="GW2NET.Newtonsoft">
+      <HintPath>..\libraries\GW2NET.Newtonsoft.dll</HintPath>
+    </Reference>
+    <Reference Include="GW2NET.V2.Maps, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libraries\GW2NET.V2.Maps.dll</HintPath>
+    </Reference>
+    <Reference Include="GW2NET.V2.Worlds">
+      <HintPath>..\libraries\GW2NET.V2.Worlds.dll</HintPath>
+    </Reference>
+    <Reference Include="GW2NET.V2.WorldVersusWorld.Matches">
+      <HintPath>..\libraries\GW2NET.V2.WorldVersusWorld.Matches.dll</HintPath>
+    </Reference>
+    <Reference Include="GW2NET.V2.WorldVersusWorld.Objectives">
+      <HintPath>..\libraries\GW2NET.V2.WorldVersusWorld.Objectives.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\libraries\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -82,6 +103,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

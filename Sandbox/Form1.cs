@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GW2NET.MumbleLink;
 using GW2NET;
-using GW2NET.Maps;
 
 namespace Sandbox
 {
     public partial class Form1 : Form, MapLinks.ITeamMapGetter
     {
+        private static GW2Bootstrapper GW2;
+
         System.Speech.Synthesis.SpeechSynthesizer synth;
         IniFile ini;
         MapLinks links;
@@ -34,6 +35,7 @@ namespace Sandbox
         public Form1()
         {
             InitializeComponent();
+            GW2 = new GW2Bootstrapper();
             synth = new System.Speech.Synthesis.SpeechSynthesizer();
             synth.SetOutputToDefaultAudioDevice();
             ini = new IniFile("C:\\rday\\rday.ini");
@@ -49,6 +51,7 @@ namespace Sandbox
             squadMessageBox.Text = iniRead("SquadMsg");
 
             mumbleTimer.Start();
+
         }
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
@@ -125,8 +128,10 @@ namespace Sandbox
         private void mumbleTimer_Tick(object sender, EventArgs e)
         {
             var a = mumble.Read();
+            if (a == null || a.Context == null || a.Identity == null)
+                return;
+
             mapNameLabel.Text = a.Context.MapId.ToString();
-            teamColorLabel.Text = a.Identity.TeamColorId.ToString();
             string map;
             if (mapDict.TryGetValue(a.Context.MapId, out map))
             {
@@ -135,16 +140,38 @@ namespace Sandbox
                     setMap(map);
                 }
             }
+
+            maybeUpdateTeam(a.Identity.TeamColorId);
+        }
+
+        private void maybeUpdateTeam(int teamColorId)
+        {
+            teamColorLabel.Text = teamColorId.ToString();
             string teamColor;
-            if (teamColorDict.TryGetValue(a.Identity.TeamColorId, out teamColor))
+            if (teamColorDict.TryGetValue(teamColorId, out teamColor))
             {
                 if (!teamLabel.Text.Equals(teamColor))
                 {
                     teamLabel.Text = teamColor;
+
                     refreshLinks();
                 }
-
             }
+        }
+
+        private void refreshMapNames() {
+            var repository = GW2.V2.WorldVersusWorld.MatchesByWorld;
+            var match = repository.Find(1008);
+
+            var worldRepo = GW2.V2.Worlds.ForDefaultCulture();
+            var redWorld = worldRepo.Find(match.Worlds.Red);
+            var blueWorld = worldRepo.Find(match.Worlds.Blue);
+            var greenWorld = worldRepo.Find(match.Worlds.Green);
+
+            speechBox.Text = String.Format("Red = {0}, Blue = {1}, Green = {2}", redWorld.AbbreviatedName, greenWorld.AbbreviatedName, blueWorld.AbbreviatedName);
+            redBL.Text = "Red = " + redWorld.AbbreviatedName;
+            blueBL.Text = "Blue = " + blueWorld.AbbreviatedName;
+            greenBL.Text = "Green = " + greenWorld.AbbreviatedName;
         }
 
         private void updateSquad()
@@ -162,6 +189,11 @@ namespace Sandbox
         private void squadUpdateButton_Click(object sender, EventArgs e)
         {
             updateSquad();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            refreshMapNames();
         }
     }
 }

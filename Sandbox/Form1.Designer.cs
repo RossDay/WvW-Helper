@@ -49,21 +49,26 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.splitContainer5 = new System.Windows.Forms.SplitContainer();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
-            this.splitContainer5 = new System.Windows.Forms.SplitContainer();
             this.joinSquadBox = new System.Windows.Forms.GroupBox();
             this.splitContainer6 = new System.Windows.Forms.SplitContainer();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.squadMapTextBox = new System.Windows.Forms.TextBox();
+            this.squadMapLabel = new System.Windows.Forms.Label();
             this.pinLabel = new System.Windows.Forms.Label();
             this.pinTextBox = new System.Windows.Forms.TextBox();
-            this.squadMapLabel = new System.Windows.Forms.Label();
-            this.squadMapTextBox = new System.Windows.Forms.TextBox();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.squadMessageBox = new System.Windows.Forms.TextBox();
             this.squadUpdateButton = new System.Windows.Forms.Button();
+            this.squadMessageBox = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).BeginInit();
+            this.splitContainer5.Panel1.SuspendLayout();
+            this.splitContainer5.Panel2.SuspendLayout();
+            this.splitContainer5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -80,10 +85,6 @@
             this.splitContainer4.Panel1.SuspendLayout();
             this.splitContainer4.Panel2.SuspendLayout();
             this.splitContainer4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).BeginInit();
-            this.splitContainer5.Panel1.SuspendLayout();
-            this.splitContainer5.Panel2.SuspendLayout();
-            this.splitContainer5.SuspendLayout();
             this.joinSquadBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer6)).BeginInit();
             this.splitContainer6.Panel1.SuspendLayout();
@@ -292,6 +293,23 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(300, 167);
             this.tableLayoutPanel1.TabIndex = 17;
             // 
+            // splitContainer5
+            // 
+            this.splitContainer5.Location = new System.Drawing.Point(202, 113);
+            this.splitContainer5.Name = "splitContainer5";
+            this.splitContainer5.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer5.Panel1
+            // 
+            this.splitContainer5.Panel1.Controls.Add(this.label4);
+            // 
+            // splitContainer5.Panel2
+            // 
+            this.splitContainer5.Panel2.Controls.Add(this.teamColorLabel);
+            this.splitContainer5.Size = new System.Drawing.Size(95, 51);
+            this.splitContainer5.SplitterDistance = 25;
+            this.splitContainer5.TabIndex = 12;
+            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -307,7 +325,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.mapLabel);
             this.splitContainer1.Size = new System.Drawing.Size(94, 49);
-            this.splitContainer1.SplitterDistance = 20;
+            this.splitContainer1.SplitterDistance = 25;
             this.splitContainer1.TabIndex = 8;
             // 
             // splitContainer2
@@ -324,7 +342,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.label1);
             this.splitContainer2.Size = new System.Drawing.Size(93, 49);
-            this.splitContainer2.SplitterDistance = 20;
+            this.splitContainer2.SplitterDistance = 25;
             this.splitContainer2.TabIndex = 9;
             // 
             // splitContainer3
@@ -358,25 +376,8 @@
             // 
             this.splitContainer4.Panel2.Controls.Add(this.mapNameLabel);
             this.splitContainer4.Size = new System.Drawing.Size(95, 49);
-            this.splitContainer4.SplitterDistance = 20;
+            this.splitContainer4.SplitterDistance = 25;
             this.splitContainer4.TabIndex = 11;
-            // 
-            // splitContainer5
-            // 
-            this.splitContainer5.Location = new System.Drawing.Point(202, 113);
-            this.splitContainer5.Name = "splitContainer5";
-            this.splitContainer5.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer5.Panel1
-            // 
-            this.splitContainer5.Panel1.Controls.Add(this.label4);
-            // 
-            // splitContainer5.Panel2
-            // 
-            this.splitContainer5.Panel2.Controls.Add(this.teamColorLabel);
-            this.splitContainer5.Size = new System.Drawing.Size(95, 51);
-            this.splitContainer5.SplitterDistance = 25;
-            this.splitContainer5.TabIndex = 12;
             // 
             // joinSquadBox
             // 
@@ -407,46 +408,6 @@
             this.splitContainer6.SplitterDistance = 25;
             this.splitContainer6.TabIndex = 0;
             // 
-            // pinLabel
-            // 
-            this.pinLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pinLabel.AutoSize = true;
-            this.pinLabel.Location = new System.Drawing.Point(3, 0);
-            this.pinLabel.Name = "pinLabel";
-            this.pinLabel.Size = new System.Drawing.Size(38, 25);
-            this.pinLabel.TabIndex = 0;
-            this.pinLabel.Text = "Pin:";
-            this.pinLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // pinTextBox
-            // 
-            this.pinTextBox.Location = new System.Drawing.Point(47, 3);
-            this.pinTextBox.Name = "pinTextBox";
-            this.pinTextBox.Size = new System.Drawing.Size(67, 20);
-            this.pinTextBox.TabIndex = 1;
-            // 
-            // squadMapLabel
-            // 
-            this.squadMapLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.squadMapLabel.AutoSize = true;
-            this.squadMapLabel.Location = new System.Drawing.Point(120, 0);
-            this.squadMapLabel.Name = "squadMapLabel";
-            this.squadMapLabel.Size = new System.Drawing.Size(38, 25);
-            this.squadMapLabel.TabIndex = 2;
-            this.squadMapLabel.Text = "Map:";
-            this.squadMapLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // squadMapTextBox
-            // 
-            this.squadMapTextBox.Location = new System.Drawing.Point(164, 3);
-            this.squadMapTextBox.Name = "squadMapTextBox";
-            this.squadMapTextBox.Size = new System.Drawing.Size(67, 20);
-            this.squadMapTextBox.TabIndex = 3;
-            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 5;
@@ -468,14 +429,45 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 25);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
-            // squadMessageBox
+            // squadMapTextBox
             // 
-            this.squadMessageBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.squadMessageBox.Location = new System.Drawing.Point(4, 4);
-            this.squadMessageBox.Multiline = true;
-            this.squadMessageBox.Name = "squadMessageBox";
-            this.squadMessageBox.Size = new System.Drawing.Size(286, 45);
-            this.squadMessageBox.TabIndex = 0;
+            this.squadMapTextBox.Location = new System.Drawing.Point(164, 3);
+            this.squadMapTextBox.Name = "squadMapTextBox";
+            this.squadMapTextBox.Size = new System.Drawing.Size(67, 20);
+            this.squadMapTextBox.TabIndex = 3;
+            // 
+            // squadMapLabel
+            // 
+            this.squadMapLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.squadMapLabel.AutoSize = true;
+            this.squadMapLabel.Location = new System.Drawing.Point(120, 0);
+            this.squadMapLabel.Name = "squadMapLabel";
+            this.squadMapLabel.Size = new System.Drawing.Size(38, 25);
+            this.squadMapLabel.TabIndex = 2;
+            this.squadMapLabel.Text = "Map:";
+            this.squadMapLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // pinLabel
+            // 
+            this.pinLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pinLabel.AutoSize = true;
+            this.pinLabel.Location = new System.Drawing.Point(3, 0);
+            this.pinLabel.Name = "pinLabel";
+            this.pinLabel.Size = new System.Drawing.Size(38, 25);
+            this.pinLabel.TabIndex = 0;
+            this.pinLabel.Text = "Pin:";
+            this.pinLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // pinTextBox
+            // 
+            this.pinTextBox.Location = new System.Drawing.Point(47, 3);
+            this.pinTextBox.Name = "pinTextBox";
+            this.pinTextBox.Size = new System.Drawing.Size(67, 20);
+            this.pinTextBox.TabIndex = 1;
             // 
             // squadUpdateButton
             // 
@@ -487,11 +479,35 @@
             this.squadUpdateButton.UseVisualStyleBackColor = true;
             this.squadUpdateButton.Click += new System.EventHandler(this.squadUpdateButton_Click);
             // 
+            // squadMessageBox
+            // 
+            this.squadMessageBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.squadMessageBox.Location = new System.Drawing.Point(4, 4);
+            this.squadMessageBox.Multiline = true;
+            this.squadMessageBox.Name = "squadMessageBox";
+            this.squadMessageBox.Size = new System.Drawing.Size(286, 45);
+            this.squadMessageBox.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(126, 329);
+            this.button1.Margin = new System.Windows.Forms.Padding(15);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(71, 25);
+            this.button1.TabIndex = 19;
+            this.button1.Text = "Test";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(322, 327);
+            this.ClientSize = new System.Drawing.Size(322, 360);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.joinSquadBox);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.speakButton);
@@ -501,6 +517,12 @@
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.splitContainer5.Panel1.ResumeLayout(false);
+            this.splitContainer5.Panel1.PerformLayout();
+            this.splitContainer5.Panel2.ResumeLayout(false);
+            this.splitContainer5.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).EndInit();
+            this.splitContainer5.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -525,12 +547,6 @@
             this.splitContainer4.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).EndInit();
             this.splitContainer4.ResumeLayout(false);
-            this.splitContainer5.Panel1.ResumeLayout(false);
-            this.splitContainer5.Panel1.PerformLayout();
-            this.splitContainer5.Panel2.ResumeLayout(false);
-            this.splitContainer5.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).EndInit();
-            this.splitContainer5.ResumeLayout(false);
             this.joinSquadBox.ResumeLayout(false);
             this.splitContainer6.Panel1.ResumeLayout(false);
             this.splitContainer6.Panel2.ResumeLayout(false);
@@ -579,6 +595,7 @@
         private System.Windows.Forms.TextBox pinTextBox;
         private System.Windows.Forms.TextBox squadMessageBox;
         private System.Windows.Forms.Button squadUpdateButton;
+        private System.Windows.Forms.Button button1;
     }
 }
 

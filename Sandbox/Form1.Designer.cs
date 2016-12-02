@@ -34,18 +34,14 @@
             this.speechBox = new System.Windows.Forms.TextBox();
             this.speakButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.redBL = new System.Windows.Forms.Button();
-            this.ebg = new System.Windows.Forms.Button();
-            this.mapLabel = new System.Windows.Forms.Label();
-            this.greenBL = new System.Windows.Forms.Button();
-            this.blueBL = new System.Windows.Forms.Button();
+            this.mapCurrentNameLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.teamLabel = new System.Windows.Forms.Label();
             this.mumbleTimer = new System.Windows.Forms.Timer(this.components);
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.mapNameLabel = new System.Windows.Forms.Label();
-            this.teamColorLabel = new System.Windows.Forms.Label();
+            this.mapIdLabel = new System.Windows.Forms.Label();
+            this.teamColorIdLabel = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -64,6 +60,10 @@
             this.squadUpdateButton = new System.Windows.Forms.Button();
             this.squadMessageBox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label7 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).BeginInit();
             this.splitContainer5.Panel1.SuspendLayout();
@@ -91,6 +91,9 @@
             this.splitContainer6.Panel2.SuspendLayout();
             this.splitContainer6.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -103,14 +106,14 @@
             // 
             // speechBox
             // 
-            this.speechBox.Location = new System.Drawing.Point(12, 15);
+            this.speechBox.Location = new System.Drawing.Point(5, 7);
             this.speechBox.Name = "speechBox";
             this.speechBox.Size = new System.Drawing.Size(216, 20);
             this.speechBox.TabIndex = 0;
             // 
             // speakButton
             // 
-            this.speakButton.Location = new System.Drawing.Point(234, 12);
+            this.speakButton.Location = new System.Drawing.Point(227, 4);
             this.speakButton.Name = "speakButton";
             this.speakButton.Size = new System.Drawing.Size(75, 23);
             this.speakButton.TabIndex = 1;
@@ -127,70 +130,14 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "mode";
             // 
-            // redBL
+            // mapCurrentNameLabel
             // 
-            this.redBL.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.redBL.Location = new System.Drawing.Point(114, 15);
-            this.redBL.Margin = new System.Windows.Forms.Padding(15);
-            this.redBL.Name = "redBL";
-            this.redBL.Size = new System.Drawing.Size(70, 25);
-            this.redBL.TabIndex = 3;
-            this.redBL.Text = "Red";
-            this.redBL.UseVisualStyleBackColor = true;
-            this.redBL.Click += new System.EventHandler(this.mapButtonClick);
-            // 
-            // ebg
-            // 
-            this.ebg.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ebg.Location = new System.Drawing.Point(114, 125);
-            this.ebg.Margin = new System.Windows.Forms.Padding(15);
-            this.ebg.Name = "ebg";
-            this.ebg.Size = new System.Drawing.Size(70, 27);
-            this.ebg.TabIndex = 4;
-            this.ebg.Text = "EBG";
-            this.ebg.UseVisualStyleBackColor = true;
-            this.ebg.Click += new System.EventHandler(this.mapButtonClick);
-            // 
-            // mapLabel
-            // 
-            this.mapLabel.AutoSize = true;
-            this.mapLabel.Location = new System.Drawing.Point(36, 6);
-            this.mapLabel.Name = "mapLabel";
-            this.mapLabel.Size = new System.Drawing.Size(27, 13);
-            this.mapLabel.TabIndex = 5;
-            this.mapLabel.Text = "map";
-            // 
-            // greenBL
-            // 
-            this.greenBL.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.greenBL.Location = new System.Drawing.Point(15, 70);
-            this.greenBL.Margin = new System.Windows.Forms.Padding(15);
-            this.greenBL.Name = "greenBL";
-            this.greenBL.Size = new System.Drawing.Size(69, 25);
-            this.greenBL.TabIndex = 6;
-            this.greenBL.Text = "Green";
-            this.greenBL.UseVisualStyleBackColor = true;
-            this.greenBL.Click += new System.EventHandler(this.mapButtonClick);
-            // 
-            // blueBL
-            // 
-            this.blueBL.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.blueBL.Location = new System.Drawing.Point(214, 70);
-            this.blueBL.Margin = new System.Windows.Forms.Padding(15);
-            this.blueBL.Name = "blueBL";
-            this.blueBL.Size = new System.Drawing.Size(71, 25);
-            this.blueBL.TabIndex = 7;
-            this.blueBL.Text = "Blue";
-            this.blueBL.UseVisualStyleBackColor = true;
-            this.blueBL.Click += new System.EventHandler(this.mapButtonClick);
+            this.mapCurrentNameLabel.AutoSize = true;
+            this.mapCurrentNameLabel.Location = new System.Drawing.Point(36, 6);
+            this.mapCurrentNameLabel.Name = "mapCurrentNameLabel";
+            this.mapCurrentNameLabel.Size = new System.Drawing.Size(27, 13);
+            this.mapCurrentNameLabel.TabIndex = 5;
+            this.mapCurrentNameLabel.Text = "map";
             // 
             // label2
             // 
@@ -233,23 +180,23 @@
             this.label4.TabIndex = 11;
             this.label4.Text = "Team Color ID:";
             // 
-            // mapNameLabel
+            // mapIdLabel
             // 
-            this.mapNameLabel.AutoSize = true;
-            this.mapNameLabel.Location = new System.Drawing.Point(30, 6);
-            this.mapNameLabel.Name = "mapNameLabel";
-            this.mapNameLabel.Size = new System.Drawing.Size(38, 13);
-            this.mapNameLabel.TabIndex = 12;
-            this.mapNameLabel.Text = "map id";
+            this.mapIdLabel.AutoSize = true;
+            this.mapIdLabel.Location = new System.Drawing.Point(30, 6);
+            this.mapIdLabel.Name = "mapIdLabel";
+            this.mapIdLabel.Size = new System.Drawing.Size(38, 13);
+            this.mapIdLabel.TabIndex = 12;
+            this.mapIdLabel.Text = "map id";
             // 
-            // teamColorLabel
+            // teamColorIdLabel
             // 
-            this.teamColorLabel.AutoSize = true;
-            this.teamColorLabel.Location = new System.Drawing.Point(32, 6);
-            this.teamColorLabel.Name = "teamColorLabel";
-            this.teamColorLabel.Size = new System.Drawing.Size(41, 13);
-            this.teamColorLabel.TabIndex = 13;
-            this.teamColorLabel.Text = "team id";
+            this.teamColorIdLabel.AutoSize = true;
+            this.teamColorIdLabel.Location = new System.Drawing.Point(32, 6);
+            this.teamColorIdLabel.Name = "teamColorIdLabel";
+            this.teamColorIdLabel.Size = new System.Drawing.Size(41, 13);
+            this.teamColorIdLabel.TabIndex = 13;
+            this.teamColorIdLabel.Text = "team id";
             // 
             // label5
             // 
@@ -276,15 +223,11 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
             this.tableLayoutPanel1.Controls.Add(this.splitContainer5, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.blueBL, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.ebg, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.splitContainer1, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.greenBL, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.redBL, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.splitContainer2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.splitContainer3, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.splitContainer4, 2, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 44);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 36);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
@@ -305,7 +248,7 @@
             // 
             // splitContainer5.Panel2
             // 
-            this.splitContainer5.Panel2.Controls.Add(this.teamColorLabel);
+            this.splitContainer5.Panel2.Controls.Add(this.teamColorIdLabel);
             this.splitContainer5.Size = new System.Drawing.Size(95, 51);
             this.splitContainer5.SplitterDistance = 25;
             this.splitContainer5.TabIndex = 12;
@@ -323,7 +266,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.mapLabel);
+            this.splitContainer1.Panel2.Controls.Add(this.mapCurrentNameLabel);
             this.splitContainer1.Size = new System.Drawing.Size(94, 49);
             this.splitContainer1.SplitterDistance = 25;
             this.splitContainer1.TabIndex = 8;
@@ -374,7 +317,7 @@
             // 
             // splitContainer4.Panel2
             // 
-            this.splitContainer4.Panel2.Controls.Add(this.mapNameLabel);
+            this.splitContainer4.Panel2.Controls.Add(this.mapIdLabel);
             this.splitContainer4.Size = new System.Drawing.Size(95, 49);
             this.splitContainer4.SplitterDistance = 25;
             this.splitContainer4.TabIndex = 11;
@@ -382,7 +325,7 @@
             // joinSquadBox
             // 
             this.joinSquadBox.Controls.Add(this.splitContainer6);
-            this.joinSquadBox.Location = new System.Drawing.Point(12, 217);
+            this.joinSquadBox.Location = new System.Drawing.Point(5, 209);
             this.joinSquadBox.Name = "joinSquadBox";
             this.joinSquadBox.Size = new System.Drawing.Size(300, 101);
             this.joinSquadBox.TabIndex = 18;
@@ -490,28 +433,69 @@
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(126, 329);
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.button1.Location = new System.Drawing.Point(96, 321);
             this.button1.Margin = new System.Windows.Forms.Padding(15);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(71, 25);
+            this.button1.Size = new System.Drawing.Size(105, 28);
             this.button1.TabIndex = 19;
             this.button1.Text = "Test";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(0, 2);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(319, 389);
+            this.tabControl1.TabIndex = 20;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.button1);
+            this.tabPage1.Controls.Add(this.speechBox);
+            this.tabPage1.Controls.Add(this.joinSquadBox);
+            this.tabPage1.Controls.Add(this.speakButton);
+            this.tabPage1.Controls.Add(this.tableLayoutPanel1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(311, 363);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Setup";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.label7);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(311, 363);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "WVW";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label7.Location = new System.Drawing.Point(3, 3);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(35, 13);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "label7";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(322, 360);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.joinSquadBox);
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.speakButton);
-            this.Controls.Add(this.speechBox);
+            this.ClientSize = new System.Drawing.Size(318, 390);
+            this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
@@ -555,8 +539,12 @@
             this.splitContainer6.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -566,18 +554,14 @@
         private System.Windows.Forms.TextBox speechBox;
         private System.Windows.Forms.Button speakButton;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button redBL;
-        private System.Windows.Forms.Button ebg;
-        private System.Windows.Forms.Label mapLabel;
-        private System.Windows.Forms.Button greenBL;
-        private System.Windows.Forms.Button blueBL;
+        private System.Windows.Forms.Label mapCurrentNameLabel;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label teamLabel;
         private System.Windows.Forms.Timer mumbleTimer;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label mapNameLabel;
-        private System.Windows.Forms.Label teamColorLabel;
+        private System.Windows.Forms.Label mapIdLabel;
+        private System.Windows.Forms.Label teamColorIdLabel;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -596,6 +580,10 @@
         private System.Windows.Forms.TextBox squadMessageBox;
         private System.Windows.Forms.Button squadUpdateButton;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Label label7;
     }
 }
 

@@ -1,27 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sandbox
 {
     class MapLinks
     {
-        public interface ITeamMapGetter
-        {
-            String Team { get; }
-            String Map { get; }
-        }
-
         private Dictionary<String, Dictionary<String, String>> _WaypointLinks = new Dictionary<string, Dictionary<string, string>>();
         private ITeamMapGetter _Getter;
+        private IniFile _Ini;
         private String Team { get { return _Getter.Team; } }
         private String Map { get { return _Getter.Map; } }
 
-        public MapLinks(ITeamMapGetter getter)
+        public MapLinks(ITeamMapGetter getter, IniFile ini)
         {
             _Getter = getter;
+            _Ini = ini;
 
             var links = new Dictionary<String, String>();
             links["Citadel"] = "[&BNYEAAA=]";
@@ -61,19 +54,35 @@ namespace Sandbox
             _WaypointLinks["EBG"] = links;
         }
 
-        public String Get(String location, String map = null)
+        public void updateMapBasedLinks()
+        {
+            _Ini.Write("CurrentMapKeep", GetCurrentKeep(), "GW2");
+            _Ini.Write("CurrentMapSpawn", GetSpawn(), "GW2");
+        }
+
+        public void updateTeamBasedLinks()
+        {
+            _Ini.Write("LeftSpawn", GetLeftSpawn(), "GW2");
+            _Ini.Write("RightSpawn", GetRightSpawn(), "GW2");
+            _Ini.Write("HomeSpawn", GetSpawn(Team), "GW2");
+            _Ini.Write("Garrison", GetGarrison(), "GW2");
+            _Ini.Write("EBGSpawn", Get(Team, "EBG"), "GW2");
+            _Ini.Write("EBGKeep", Get(Team + "Keep", "EBG"), "GW2");
+        }
+
+        private String Get(String location, String map = null)
         {
             if (map == null)
                 map = Map;
             return _WaypointLinks[map][location];
         }
 
-        public String GetGarrison()
+        private String GetGarrison()
         {
             return _WaypointLinks[Team]["Garrison"];
         }
 
-        public String GetCurrentKeep()
+        private String GetCurrentKeep()
         {
             if (Team.Equals(Map))
                 return GetGarrison();
@@ -82,7 +91,7 @@ namespace Sandbox
             return GetSpawn();
         }
 
-        public String GetSpawn(String map = null)
+        private String GetSpawn(String map = null)
         {
             map = map ?? Map;
             if (Team.Equals(map))
@@ -90,24 +99,24 @@ namespace Sandbox
             return _WaypointLinks[map][Team];
         }
 
-        public String GetLeftMapColor()
+        private String GetLeftMapColor()
         {
             var teams = new String[] { "Red", "Green", "Blue" };
             return teams[(Array.IndexOf(teams, Team) - 1 + teams.Length) % teams.Length];
         }
 
-        public String GetLeftSpawn()
+        private String GetLeftSpawn()
         {
             return GetSpawn(GetLeftMapColor());
         }
 
-        public String GetRightMapColor()
+        private String GetRightMapColor()
         {
             var teams = new String[] { "Red", "Green", "Blue" };
             return teams[(Array.IndexOf(teams, Team) + 1) % teams.Length];
         }
 
-        public String GetRightSpawn()
+        private String GetRightSpawn()
         {
             return GetSpawn(GetRightMapColor());
         }

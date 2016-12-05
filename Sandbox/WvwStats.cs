@@ -68,6 +68,9 @@ namespace Sandbox
             RedWorld = worlds[0].AbbreviatedName;
             GreenWorld = worlds[1].AbbreviatedName;
             BlueWorld = worlds[2].AbbreviatedName;
+            Ini.Write("RedWorld", RedWorld, "GW2");
+            Ini.Write("GreenWorld", GreenWorld, "GW2");
+            Ini.Write("BlueWorld", BlueWorld, "GW2");
 
             var index = Array.IndexOf(TeamList, OurTeam);
 
@@ -113,13 +116,11 @@ namespace Sandbox
         private void writeStats()
         {
             writeCurrentScores();
-            writeDeltaScores(10);
-            writeDeltaScores(20);
-            writeDeltaScores(30);
-            writeDeltaScores(60);
 
             writeCurrentRatios();
+            writeDeltaRatios(5);
             writeDeltaRatios(10);
+            writeDeltaRatios(15);
             writeDeltaRatios(20);
             writeDeltaRatios(30);
             writeDeltaRatios(60);

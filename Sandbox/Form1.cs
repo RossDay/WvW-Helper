@@ -75,8 +75,8 @@ namespace Sandbox
                 string map = null;
 
                 var match = Manager.WvwStats.GetHistoryMatch(0);
-                var delta10 = Manager.WvwStats.GetHistoryMatch(1);
-                var delta30 = Manager.WvwStats.GetHistoryMatch(3);
+                var delta10 = Manager.WvwStats.GetHistoryMatch(5);
+                var delta30 = Manager.WvwStats.GetHistoryMatch(15);
 
                 builder.Append("Scores: JQ = ");
                 builder.Append(match.Scores.Get(Manager.Team));

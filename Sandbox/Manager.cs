@@ -97,11 +97,11 @@ namespace Sandbox
             if (MapId.Equals(newMapId))
                 return false;
 
-            MapId = newMapId;
-
             string map;
-            if (!_MapDict.TryGetValue(MapId, out map))
-                map = "UNK";
+            if (!_MapDict.TryGetValue(newMapId, out map))
+                return false;
+
+            MapId = newMapId;
             Map = map;
 
             updateMapBasedLinks();
@@ -123,11 +123,11 @@ namespace Sandbox
             if (TeamColorId.Equals(newColorId))
                 return false;
 
-            TeamColorId = newColorId;
-
             string teamColor;
-            if (!_TeamColorDict.TryGetValue(TeamColorId, out teamColor))
-                teamColor = "UNK";
+            if (!_TeamColorDict.TryGetValue(newColorId, out teamColor))
+                return false;
+
+            TeamColorId = newColorId;
             Team = teamColor;
 
             WvwStats.updateLeftRightWorldNames();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
@@ -6,7 +7,7 @@ using GW2NET.WorldVersusWorld;
 
 namespace Sandbox
 {
-    class MatchHistory
+    class MatchHistory : IEnumerable<KeyValuePair<DateTime, Match>>
     {
         private LinkedList<KeyValuePair<DateTime, Match>> Matches { get; set; }
 
@@ -15,7 +16,7 @@ namespace Sandbox
             Matches = Deserialize();
         }
 
-        private DateTime LastUpdateTime
+        public DateTime LastUpdateTime
         {
             get
             {
@@ -51,12 +52,17 @@ namespace Sandbox
             return false;
         }
 
+        public void clear()
+        {
+            Matches.Clear();
+        }
+
         public static readonly string MATCH_HISTORY_FILE = "C:\\rday\\wvwhistory.dat";
         private static readonly DataContractSerializer _Serializer = new DataContractSerializer(typeof(LinkedList<KeyValuePair<DateTime, Match>>), new Type[] { typeof(RedBorderlands), typeof(GreenBorderlands), typeof(BlueBorderlands), typeof(EternalBattlegrounds), typeof(Bloodlust) });
 
         public void Serialize()
         {
-            using (FileStream fs = File.OpenWrite(MATCH_HISTORY_FILE))
+            using (FileStream fs = File.Create(MATCH_HISTORY_FILE))
             {
                 _Serializer.WriteObject(fs, Matches);
             }
@@ -82,6 +88,16 @@ namespace Sandbox
             {
                 return new LinkedList<KeyValuePair<DateTime, Match>>();
             }
+        }
+
+        public IEnumerator<KeyValuePair<DateTime, Match>> GetEnumerator()
+        {
+            return Matches.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

@@ -44,7 +44,6 @@ namespace Sandbox
 
             Ini = new IniFile("C:\\rday\\rday.ini");
             Links = new MapLinks(this, Ini);
-            WvwStats = new WvwStats(this, Ini);
             Mumble = MumbleLinkFile.CreateOrOpen();
 
             Mode = Convert.ToInt32(iniRead("mode", "0"));
@@ -53,11 +52,12 @@ namespace Sandbox
 
             TeamColorId = Convert.ToInt32(iniRead("team_id", "0"));
             Team = iniRead("team");
-            WvwStats.updateLeftRightWorldNames();
 
             SquadPin = iniRead("SquadPin");
             SquadMap = iniRead("SquadMap");
             SquadMessage = iniRead("SquadMsg");
+
+            WvwStats = new WvwStats(this, Ini);
         }
 
         public void maybeUpdateMode()
@@ -130,7 +130,7 @@ namespace Sandbox
             TeamColorId = newColorId;
             Team = teamColor;
 
-            WvwStats.updateLeftRightWorldNames();
+            WvwStats.reset();
             Links.updateTeamBasedLinks();
 
             return true;

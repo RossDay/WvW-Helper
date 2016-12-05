@@ -68,5 +68,40 @@ namespace Sandbox
                 return Convert.ToDecimal(killDelta);
             return Math.Round(Convert.ToDecimal(killDelta) / Convert.ToDecimal(deathDelta), 1);
         }
+
+        public static Dictionary<string, Dictionary<string, int>> GetObjectiveCounts(this Match match, string map)
+        {
+            var objectives = new Dictionary<string, Dictionary<string, int>>();
+
+            Dictionary<string, int> temp;
+
+            temp = new Dictionary<string, int>();
+            temp.Add("Castle", 0);
+            temp.Add("Keep", 0);
+            temp.Add("Tower", 0);
+            temp.Add("Camp", 0);
+            objectives.Add("Red", temp);
+            temp = new Dictionary<string, int>();
+            temp.Add("Castle", 0);
+            temp.Add("Keep", 0);
+            temp.Add("Tower", 0);
+            temp.Add("Camp", 0);
+            objectives.Add("Green", temp);
+            temp = new Dictionary<string, int>();
+            temp.Add("Castle", 0);
+            temp.Add("Keep", 0);
+            temp.Add("Tower", 0);
+            temp.Add("Camp", 0);
+            objectives.Add("Blue", temp);
+
+            foreach (var o in match.GetMap(map).Objectives)
+            {
+                if (o.Owner == TeamColor.Unknown || o.Owner == TeamColor.Neutral || o.Type.Equals("Ruins"))
+                    continue;
+                objectives[o.Owner.ToString()][o.Type] += 1;
+            }
+
+            return objectives;
+        }
     }
 }

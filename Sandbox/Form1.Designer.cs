@@ -63,7 +63,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label7 = new System.Windows.Forms.Label();
+            this.wvwTabLabel = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.historyLabel = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).BeginInit();
             this.splitContainer5.Panel1.SuspendLayout();
@@ -94,6 +96,7 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -448,6 +451,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(0, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -471,7 +475,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.label7);
+            this.tabPage2.Controls.Add(this.wvwTabLabel);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -480,15 +484,36 @@
             this.tabPage2.Text = "WVW";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // label7
+            // wvwTabLabel
             // 
-            this.label7.AutoSize = true;
-            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label7.Location = new System.Drawing.Point(3, 3);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(35, 13);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "label7";
+            this.wvwTabLabel.AutoSize = true;
+            this.wvwTabLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wvwTabLabel.Location = new System.Drawing.Point(3, 3);
+            this.wvwTabLabel.Name = "wvwTabLabel";
+            this.wvwTabLabel.Size = new System.Drawing.Size(35, 13);
+            this.wvwTabLabel.TabIndex = 0;
+            this.wvwTabLabel.Text = "label7";
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.historyLabel);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(311, 363);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "History";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // historyLabel
+            // 
+            this.historyLabel.AutoSize = true;
+            this.historyLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.historyLabel.Location = new System.Drawing.Point(3, 3);
+            this.historyLabel.Name = "historyLabel";
+            this.historyLabel.Size = new System.Drawing.Size(35, 13);
+            this.historyLabel.TabIndex = 1;
+            this.historyLabel.Text = "label7";
             // 
             // Form1
             // 
@@ -544,6 +569,8 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -583,7 +610,9 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label wvwTabLabel;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Label historyLabel;
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Text;
 using GW2NET;
 using GW2NET.Worlds;
 using GW2NET.WorldVersusWorld;
@@ -11,7 +12,9 @@ namespace Sandbox
     {
         private static readonly string[] TeamList = new string[] { "Red", "Green", "Blue" };
         private static readonly string[] MapList = new string[] { null, "Red", "Green", "Blue", "EBG" };
+        private static readonly int[] Intervals = new int[] { 0, 5, 10, 15, 20, 30, 60 };
         private readonly Dictionary<string, string> CurrentTeams = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> CurrentWorlds = new Dictionary<string, string>();
 
         private GW2Bootstrapper GW2 { get; set; }
         private ITeamMapGetter Getter { get; set; }
@@ -23,9 +26,6 @@ namespace Sandbox
         public string OurWorld { get; private set; }
         public string LeftWorld { get; private set; }
         public string RightWorld { get; private set; }
-        public string RedWorld { get; private set; }
-        public string GreenWorld { get; private set; }
-        public string BlueWorld { get; private set; }
 
         private MatchHistory MatchHistory;
         public Match GetHistoryMatch(int interval)
@@ -65,12 +65,9 @@ namespace Sandbox
                 worldRepo.Find(matchWorlds.Blue)
             };
 
-            RedWorld = worlds[0].AbbreviatedName;
-            GreenWorld = worlds[1].AbbreviatedName;
-            BlueWorld = worlds[2].AbbreviatedName;
-            Ini.Write("RedWorld", RedWorld, "GW2");
-            Ini.Write("GreenWorld", GreenWorld, "GW2");
-            Ini.Write("BlueWorld", BlueWorld, "GW2");
+            CurrentWorlds["Red"] = worlds[0].AbbreviatedName;
+            CurrentWorlds["Green"] = worlds[1].AbbreviatedName;
+            CurrentWorlds["Blue"] = worlds[2].AbbreviatedName;
 
             var index = Array.IndexOf(TeamList, OurTeam);
 
@@ -115,85 +112,144 @@ namespace Sandbox
 
         private void writeStats()
         {
-            writeCurrentScores();
-
-            writeCurrentRatios();
-            writeDeltaRatios(5);
-            writeDeltaRatios(10);
-            writeDeltaRatios(15);
-            writeDeltaRatios(20);
-            writeDeltaRatios(30);
-            writeDeltaRatios(60);
+            foreach (var i in Intervals)
+            {
+                writeRatioMessages(i);
+                writeOurDeltaRatioMessages(i);
+            }
+            writeOurMapRatioMessages();
         }
 
-        private void writeCurrentScores()
-        {
-            var scores = MatchHistory.GetHistoryMatch(0).Scores;
-
-            write("OurCurrentScore", scores.Get(OurTeam));
-            write("LeftCurrentScore", scores.Get(LeftTeam));
-            write("RightCurrentScore", scores.Get(RightTeam));
-        }
-
-        private void writeDeltaScores(int interval)
-        {
-            var currentScores = MatchHistory.GetHistoryMatch(0).Scores;
-            var deltaScores = GetHistoryMatch(interval).Scores;
-
-            var intervalString = interval.ToString();
-
-            var key = "OurScore" + intervalString;
-            var current = currentScores.Get(OurTeam);
-            var delta = deltaScores.Get(OurTeam);
-            write(key, (current - delta).ToString());
-
-            key = "LeftScore" + intervalString;
-            current = currentScores.Get(LeftTeam);
-            delta = deltaScores.Get(LeftTeam);
-            write(key, (current - delta).ToString());
-
-            key = "RightScore" + intervalString;
-            current = currentScores.Get(RightTeam);
-            delta = deltaScores.Get(RightTeam);
-            write(key, (current - delta).ToString());
-        }
-
-        private void writeCurrentRatios()
+        private void writeRatioMessages(int interval)
         {
             var currentMatch = MatchHistory.GetHistoryMatch(0);
+            var deltaMatch = (interval == 0 ? null : GetHistoryMatch(interval));
 
+            var builder = new StringBuilder();
             foreach (string map in MapList)
             {
-                foreach (var t in CurrentTeams)
+                var key = "";
+                if (map == null)
                 {
-                    var key = t.Value + ( String.IsNullOrEmpty(map) ? "Total" : map ) + "KDR";
-                    var value = currentMatch.GetKDR(t.Key, map);
-                    write(key, value);
+                    builder.Append("All Maps");
+                    key = "Total";
                 }
+                else if (map.Equals("EBG"))
+                {
+                    builder.Append("EBG");
+                    key = "EBG";
+                }
+                else
+                {
+                    builder.Append(CurrentWorlds[map]).Append("BL");
+                    key = CurrentTeams[map];
+                }
+                builder.Append(" ");
+                if (interval == 0)
+                    builder.Append("Total");
+                else
+                    builder.Append("Last ").Append(interval).Append("m");
+                builder.Append(" KDR: ");
+                builder.Append(OurWorld).Append(" = ");
+                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, OurTeam, map));
+                builder.Append(", ");
+                builder.Append(LeftWorld).Append(" = ");
+                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, LeftTeam, map));
+                builder.Append(", ");
+                builder.Append(RightWorld).Append(" = ");
+                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, RightTeam, map));
+
+                var msg = builder.ToString();
+                builder.Clear();
+
+                Ini.Write(key + "KDR" + interval.ToString(), "\"" + msg + "\"", "WVW");
             }
         }
 
-        private void writeDeltaRatios(int interval)
+        private void writeOurDeltaRatioMessages(int interval)
         {
             var currentMatch = MatchHistory.GetHistoryMatch(0);
-            var deltaMatch = GetHistoryMatch(interval);
+            var deltaMatch = (interval == 0 ? null : GetHistoryMatch(interval));
 
-            var intervalString = interval.ToString();
-
+            var builder = new StringBuilder();
+            builder.Append(OurWorld).Append(" ");
+            if (interval == 0)
+                builder.Append("Total");
+            else
+                builder.Append("Last ").Append(interval).Append("m");
+            builder.Append(" KDR: ");
             foreach (string map in MapList)
             {
-                foreach (var t in CurrentTeams)
+                if (map == null)
+                    builder.Append("AllMaps");
+                else if (map.Equals("EBG"))
+                    builder.Append("EBG");
+                else
+                    builder.Append(CurrentWorlds[map]).Append("BL");
+                builder.Append(" = ");
+                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, OurTeam, map));
+                builder.Append(", ");
+            }
+            builder.Length -= 2;
+
+            var msg = builder.ToString();
+            builder.Clear();
+
+            Ini.Write("OurKDR" + interval.ToString(), "\"" + msg + "\"", "OurDeltas");
+        }
+
+        private void writeOurMapRatioMessages()
+        {
+            var currentMatch = MatchHistory.GetHistoryMatch(0);
+
+            var builder = new StringBuilder();
+            foreach (string map in MapList)
+            {
+                builder.Append(OurWorld).Append(" KDR on ");
+                var key = "";
+                if (map == null)
                 {
-                    var key = t.Value + (String.IsNullOrEmpty(map) ? "Total" : map) + "KDR" + intervalString;
-                    var value = currentMatch.GetDeltaKDR(deltaMatch, t.Key, map);
-                    write(key, value);
+                    builder.Append("All Maps");
+                    key = "Total";
                 }
+                else if (map.Equals("EBG"))
+                {
+                    builder.Append("EBG");
+                    key = "EBG";
+                }
+                else
+                {
+                    builder.Append(CurrentWorlds[map]).Append("BL");
+                    key = CurrentTeams[map];
+                }
+                builder.Append(": ");
+                foreach (var interval in Intervals)
+                {
+                    if (interval == 10 || interval == 20)
+                        continue;
+
+                    var deltaMatch = (interval == 0 ? null : GetHistoryMatch(interval));
+
+                    if (interval == 0)
+                        builder.Append("Total");
+                    else
+                        builder.Append(interval).Append("m");
+                    builder.Append(" = ");
+                    builder.Append(currentMatch.GetDeltaKDR(deltaMatch, OurTeam, map));
+                    builder.Append(", ");
+                }
+                builder.Length -= 2;
+
+                var msg = builder.ToString();
+                builder.Clear();
+
+                Ini.Write("Our" + key + "KDR", "\"" + msg + "\"", "OurMaps");
             }
         }
 
         public String getStringDump()
         {
-            System.Text.StringBuilder builder = new System.Text.StringBuilder();
+            var builder = new StringBuilder();
 
             var i = 0;
             foreach (var m in MatchHistory)
@@ -230,9 +286,9 @@ namespace Sandbox
 
             row[0] = ts.Date.ToString("yyyyMMdd");
             row[1] = ts.ToString("HH:mm:ss");
-            row[2] = RedWorld;
-            row[3] = GreenWorld;
-            row[4] = BlueWorld;
+            row[2] = CurrentWorlds["Red"];
+            row[3] = CurrentWorlds["Green"];
+            row[4] = CurrentWorlds["Blue"];
             row[5] = match.Scores.Red;
             row[6] = match.Scores.Green;
             row[7] = match.Scores.Blue;

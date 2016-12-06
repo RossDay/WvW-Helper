@@ -56,17 +56,20 @@ namespace Sandbox
 
             if (deaths == 0)
                 return Convert.ToDecimal(kills);
-            return Math.Round(Convert.ToDecimal(kills) / Convert.ToDecimal(deaths), 1);
+            return Math.Round(Convert.ToDecimal(kills) / Convert.ToDecimal(deaths), 2);
         }
 
         public static decimal GetDeltaKDR(this Match current, Match delta, string team, string map = null)
         {
+            if (delta == null)
+                return current.GetKDR(team, map);
+
             var killDelta = current.GetKillsFor(team, map) - delta.GetKillsFor(team, map);
             var deathDelta = current.GetDeathsFor(team, map) - delta.GetDeathsFor(team, map);
 
             if (deathDelta == 0)
                 return Convert.ToDecimal(killDelta);
-            return Math.Round(Convert.ToDecimal(killDelta) / Convert.ToDecimal(deathDelta), 1);
+            return Math.Round(Convert.ToDecimal(killDelta) / Convert.ToDecimal(deathDelta), 2);
         }
 
         public static Dictionary<string, Dictionary<string, int>> GetObjectiveCounts(this Match match, string map)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Text;
+using System.Threading.Tasks;
 using GW2NET;
 using GW2NET.Worlds;
 using GW2NET.WorldVersusWorld;
@@ -26,6 +27,10 @@ namespace Sandbox
         public string OurWorld { get; private set; }
         public string LeftWorld { get; private set; }
         public string RightWorld { get; private set; }
+        public string GetWorldByTeam(string team)
+        {
+            return CurrentWorlds[team];
+        }
 
         private MatchHistory MatchHistory;
         public Match GetHistoryMatch(int interval)
@@ -58,6 +63,7 @@ namespace Sandbox
         {
             var matchWorlds = CurrentMatch.Worlds;
 
+
             var worldRepo = GW2.V2.Worlds.ForDefaultCulture();
             var worlds = new World[] {
                 worldRepo.Find(matchWorlds.Red),
@@ -86,15 +92,21 @@ namespace Sandbox
             CurrentTeams[RightTeam] = "Right";
         }
 
+        private Task dbTask = null;
         public bool maybeUpdateStats()
         {
             if (MatchHistory.maybeAdd(CurrentMatch))
             {
                 writeStats();
-                writeToDatabase();
+                if (dbTask != null && !dbTask.IsCompleted)
+                {
+                    dbTask.Wait();
+                    dbTask.Dispose();
+                }
+                dbTask = Task.Run(() => writeToDatabase());
                 return true;
             }
-            return true;
+            return false;
         }
 
         private void write(string key, string value, string section = "WVW")
@@ -507,6 +519,9 @@ namespace Sandbox
             }
 
         }
+
+
+        //public decimal
 
         private void foo()
         {

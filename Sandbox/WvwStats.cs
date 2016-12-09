@@ -63,7 +63,6 @@ namespace Sandbox
         {
             var matchWorlds = CurrentMatch.Worlds;
 
-
             var worldRepo = GW2.V2.Worlds.ForDefaultCulture();
             var worlds = new World[] {
                 worldRepo.Find(matchWorlds.Red),

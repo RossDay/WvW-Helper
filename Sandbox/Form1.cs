@@ -13,6 +13,8 @@ namespace Sandbox
         {
             InitializeComponent();
 
+            DoubleBuffered = true;
+
             Manager = new Manager();
 
             populateStatsTableLabels();
@@ -30,6 +32,18 @@ namespace Sandbox
 
             mumbleTimer.Start();
         }
+
+        /*
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;   // WS_EX_COMPOSITED
+                return cp;
+            }
+        }
+        */
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -77,16 +91,19 @@ namespace Sandbox
                 updateStatsTableTeamsAndMaps();
                 Refresh();
             }
+            Task t = null;
             if (Manager.maybeUpdateStats())
             {
+                t = Task.Run(() => updateStatsTable());
                 timerLabel.Text = "59";
-                Task.Run(() => updateStatsTable());
-                Task.Run(() => updateWvwStatsTab());
-                Task.Run(() => updateHistoryTab());
+                updateWvwStatsTab();
+                updateHistoryTab();
             }
             else
                 timerLabel.Text = (Convert.ToInt32(timerLabel.Text) - 1).ToString();
             timerLabel.Refresh();
+            if (t != null)
+                t.Wait();
         }
 
         private void updateHistoryTab()
@@ -159,15 +176,17 @@ namespace Sandbox
 
         private void populateStatsTableLabels()
         {
+            var anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left);
+
             var p = new Panel();
-            p.Dock = DockStyle.Fill;
+            p.Anchor = anchor;
             p.BackColor = System.Drawing.Color.Black;
             p.Margin = Padding.Empty;
             statsTable.Controls.Add(p, 1, 0);
             statsTable.SetRowSpan(p, 17);
 
             p = new Panel();
-            p.Dock = DockStyle.Fill;
+            p.Anchor = anchor;
             p.BackColor = System.Drawing.Color.Black;
             p.Margin = Padding.Empty;
             statsTable.Controls.Add(p, 5, 0);
@@ -176,20 +195,20 @@ namespace Sandbox
             foreach (var r in new int[] { 1, 5, 9, 13 })
             {
                 p = new Panel();
-                p.Dock = DockStyle.Fill;
+                p.Anchor = anchor;
                 p.BackColor = System.Drawing.Color.Black;
                 p.Margin = Padding.Empty;
                 statsTable.Controls.Add(p, 0, r);
 
                 p = new Panel();
-                p.Dock = DockStyle.Fill;
+                p.Anchor = anchor;
                 p.BackColor = System.Drawing.Color.Black;
                 p.Margin = Padding.Empty;
                 statsTable.Controls.Add(p, 2, r);
                 statsTable.SetColumnSpan(p, 3);
 
                 p = new Panel();
-                p.Dock = DockStyle.Fill;
+                p.Anchor = anchor;
                 p.BackColor = System.Drawing.Color.Black;
                 p.Margin = Padding.Empty;
                 statsTable.Controls.Add(p, 6, r);
@@ -206,6 +225,7 @@ namespace Sandbox
                         var l = new Label();
                         l.Text = $"{r}x{c}";
                         l.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+                        l.Anchor = anchor;
                         statsTable.Controls.Add(l, c, r);
                     }
         }
@@ -243,11 +263,7 @@ namespace Sandbox
                 if (r != 5 && r != 9 && r != 13)
                     for (var c = 2; c <= 8; c++)
                         if (c != 5)
-                        {
-                            var l = ((Label)statsTable.GetControlFromPosition(c, r));
-                            l.Text = funcs[r](match, deltas[c], teams[c], maps[r]).ToString();
-                            l.Refresh();
-                        }
+                            ((Label)statsTable.GetControlFromPosition(c, r)).Text = funcs[r](match, deltas[c], teams[c], maps[r]).ToString();
 
             statsTable.Refresh();
         }

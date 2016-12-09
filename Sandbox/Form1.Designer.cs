@@ -62,10 +62,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.wvwTabLabel = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.historyLabel = new System.Windows.Forms.Label();
+            this.trackingLabel = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.statsTable = new System.Windows.Forms.TableLayoutPanel();
             this.redWorldLabel = new System.Windows.Forms.Label();
@@ -108,7 +106,6 @@
             this.tableLayoutPanel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.statsTable.SuspendLayout();
@@ -468,7 +465,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -493,47 +489,26 @@
             this.tabPage1.Text = "Setup";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.wvwTabLabel);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(329, 373);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "WVW";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // wvwTabLabel
-            // 
-            this.wvwTabLabel.AutoSize = true;
-            this.wvwTabLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wvwTabLabel.Location = new System.Drawing.Point(3, 3);
-            this.wvwTabLabel.Name = "wvwTabLabel";
-            this.wvwTabLabel.Size = new System.Drawing.Size(35, 13);
-            this.wvwTabLabel.TabIndex = 0;
-            this.wvwTabLabel.Text = "label7";
-            // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.historyLabel);
+            this.tabPage3.Controls.Add(this.trackingLabel);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(329, 373);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "History";
+            this.tabPage3.Text = "Tracking";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // historyLabel
+            // trackingLabel
             // 
-            this.historyLabel.AutoSize = true;
-            this.historyLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.historyLabel.Location = new System.Drawing.Point(3, 3);
-            this.historyLabel.Name = "historyLabel";
-            this.historyLabel.Size = new System.Drawing.Size(35, 13);
-            this.historyLabel.TabIndex = 1;
-            this.historyLabel.Text = "label7";
+            this.trackingLabel.AutoSize = true;
+            this.trackingLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackingLabel.Location = new System.Drawing.Point(3, 3);
+            this.trackingLabel.Name = "trackingLabel";
+            this.trackingLabel.Size = new System.Drawing.Size(35, 13);
+            this.trackingLabel.TabIndex = 1;
+            this.trackingLabel.Text = "label7";
             // 
             // tabPage4
             // 
@@ -799,8 +774,6 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
@@ -844,10 +817,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Label wvwTabLabel;
         private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.Label historyLabel;
+        private System.Windows.Forms.Label trackingLabel;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.TableLayoutPanel statsTable;
         private System.Windows.Forms.Label redWorldLabel;

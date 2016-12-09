@@ -29,6 +29,8 @@ namespace Sandbox
         public string OurWorld { get; private set; }
         public string LeftWorld { get; private set; }
         public string RightWorld { get; private set; }
+        public string LeftTracking { get; private set; }
+        public string RightTracking { get; private set; }
         public string GetWorldByTeam(string team)
         {
             return CurrentWorlds[team];
@@ -43,6 +45,11 @@ namespace Sandbox
         private Match CurrentMatch 
         {
             get { return GW2.V2.WorldVersusWorld.MatchesByWorld.Find(1008); }
+        }
+
+        public DateTime LastUpdateTime
+        {
+            get { return MatchHistory.LastUpdateTime; }
         }
 
         public WvwStats(ITeamMapGetter getter, IniFile ini)
@@ -147,10 +154,11 @@ namespace Sandbox
                 writeOurDeltaRatioMessages(i);
             }
             writeOurMapRatioMessages();
-            writeTracking(LeftTeam);
-            writeTracking(RightTeam);
+            LeftTracking = writeTracking(LeftTeam);
+            RightTracking = writeTracking(RightTeam);
         }
 
+        #region Writing Ratios
         private void writeRatioMessages(int interval)
         {
             var currentMatch = MatchHistory.GetHistoryMatch(0);
@@ -277,31 +285,20 @@ namespace Sandbox
                 Ini.Write("Our" + key + "KDR", "\"" + msg + "\"", "OurMaps");
             }
         }
+        #endregion
 
-        public String getStringDump()
-        {
-            var builder = new StringBuilder();
-
-            var i = 0;
-            foreach (var m in MatchHistory)
-            {
-                builder.AppendFormat("Match #{0}: {1}\n", i, m.Key);
-                builder.AppendFormat(" {0}: K={1}, D={2}, KDR={3}\n", OurWorld, m.Value.Kills.Get(OurTeam), m.Value.Deaths.Get(OurTeam), m.Value.GetKDR(OurTeam));
-                builder.AppendFormat(" {0}: K={1}, D={2}, KDR={3}\n", LeftWorld, m.Value.Kills.Get(LeftTeam), m.Value.Deaths.Get(LeftTeam), m.Value.GetKDR(LeftTeam));
-                builder.AppendFormat(" {0}: K={1}, D={2}, KDR={3}\n", RightWorld, m.Value.Kills.Get(RightTeam), m.Value.Deaths.Get(RightTeam), m.Value.GetKDR(RightTeam));
-                builder.AppendLine();
-            }
-
-            return builder.ToString();
-        }
-
+        #region Writing Tracking
         private static string[] TrackedObjectiveTypes = new string[] { "Castle", "Keep", "Tower", "Camp" };
-        private void writeTracking(string team)
+        private string writeTracking(string team)
         {
             var match = MatchHistory.GetHistoryMatch(0);
             var delta = MatchHistory.GetHistoryMatch(10);
+            var result = new StringBuilder();
 
-            Ini.Write(CurrentTeams[team] + "1", "\"Tracking " + CurrentWorlds[team] + " with 10m stats...\"", "WVWTracking");
+            result.Append("Tracking " + CurrentWorlds[team] + " with 10m stats...");
+            Ini.Write(CurrentTeams[team] + "1", "\"" + result.ToString() + "\"", "WVWTracking");
+            result.AppendLine();
+
             var i = 2;
             foreach (var map in new string[] { "Red", "Green", "Blue", "EBG" })
             {
@@ -317,8 +314,7 @@ namespace Sandbox
                 var deaths = match.GetDeltaDeathsFor(delta, team, map);
 
                 var s = new StringBuilder();
-                s.Append("\"")
-                    .Append(mapName)
+                s.Append(mapName)
                     .Append(": K=")
                     .Append(kills)
                     .Append(", D=")
@@ -335,11 +331,14 @@ namespace Sandbox
                             .Append("m), ");
                     s.Length -= 2;
                 }
-                s.Append("\"");
+                result.AppendLine(s.ToString());
 
-                Ini.Write(CurrentTeams[team] + (i++).ToString(), s.ToString(), "WVWTracking");
+                Ini.Write(CurrentTeams[team] + (i++).ToString(), "\"" + s.ToString() + "\"", "WVWTracking");
             }
-        }
+
+            return result.ToString();
+        } 
+        #endregion
 
         #region SQLite Database
         private void writeToDatabase()

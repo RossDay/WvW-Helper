@@ -21,11 +21,7 @@ namespace Sandbox
             statsTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             updateStatsTableTeamsAndMaps();
             if (Manager.WvwStats.GetHistoryMatch(0) != null)
-            {
                 updateStatsTable();
-                updateWvwStatsTab();
-                updateHistoryTab();
-            }
 
             label1.Text = Manager.Mode.ToString();
             mapCurrentNameLabel.Text = Manager.Map;
@@ -101,8 +97,7 @@ namespace Sandbox
             {
                 t = Task.Run(() => updateStatsTable());
                 timerLabel.Text = "59";
-                updateWvwStatsTab();
-                updateHistoryTab();
+                updateTrackingTab();
             }
             else
                 timerLabel.Text = (Convert.ToInt32(timerLabel.Text) - 1).ToString();
@@ -111,64 +106,9 @@ namespace Sandbox
                 t.Wait();
         }
 
-        private void updateHistoryTab()
+        private void updateTrackingTab()
         {
-            historyLabel.Text = Manager.WvwStats.getStringDump();
-        }
-
-        private void updateWvwStatsTab()
-        {
-            System.Text.StringBuilder builder = new System.Text.StringBuilder();
-            string map = null;
-
-            var match = Manager.WvwStats.GetHistoryMatch(0);
-            var delta5 = Manager.WvwStats.GetHistoryMatch(5);
-            var delta15 = Manager.WvwStats.GetHistoryMatch(15);
-
-            builder.Append("Scores: JQ = ");
-            builder.Append(match.Scores.Get(Manager.Team));
-            builder.Append(", ");
-            builder.Append(Manager.WvwStats.LeftWorld);
-            builder.Append(" = ");
-            builder.Append(match.Scores.Get(Manager.WvwStats.LeftTeam));
-            builder.Append(", ");
-            builder.Append(Manager.WvwStats.RightWorld);
-            builder.Append(" = ");
-            builder.Append(match.Scores.Get(Manager.WvwStats.RightTeam));
-            builder.AppendLine();
-            builder.AppendLine();
-            builder.AppendLine("Totals");
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", "JQ", match.GetKDR(Manager.Team, map), match.GetDeltaKDR(delta5, Manager.Team, map), match.GetDeltaKDR(delta15, Manager.Team, map));
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", Manager.WvwStats.LeftWorld, match.GetKDR(Manager.WvwStats.LeftTeam, map), match.GetDeltaKDR(delta5, Manager.WvwStats.LeftTeam, map), match.GetDeltaKDR(delta15, Manager.WvwStats.LeftTeam, map));
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", Manager.WvwStats.RightWorld, match.GetKDR(Manager.WvwStats.RightTeam, map), match.GetDeltaKDR(delta5, Manager.WvwStats.RightTeam, map), match.GetDeltaKDR(delta15, Manager.WvwStats.RightTeam, map));
-            builder.AppendLine();
-            builder.AppendLine("Red");
-            map = "Red";
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", "JQ", match.GetKDR(Manager.Team, map), match.GetDeltaKDR(delta5, Manager.Team, map), match.GetDeltaKDR(delta15, Manager.Team, map));
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", Manager.WvwStats.LeftWorld, match.GetKDR(Manager.WvwStats.LeftTeam, map), match.GetDeltaKDR(delta5, Manager.WvwStats.LeftTeam, map), match.GetDeltaKDR(delta15, Manager.WvwStats.LeftTeam, map));
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", Manager.WvwStats.RightWorld, match.GetKDR(Manager.WvwStats.RightTeam, map), match.GetDeltaKDR(delta5, Manager.WvwStats.RightTeam, map), match.GetDeltaKDR(delta15, Manager.WvwStats.RightTeam, map));
-            builder.AppendLine();
-            builder.AppendLine("Green");
-            map = "Green";
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", "JQ", match.GetKDR(Manager.Team, map), match.GetDeltaKDR(delta5, Manager.Team, map), match.GetDeltaKDR(delta15, Manager.Team, map));
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", Manager.WvwStats.LeftWorld, match.GetKDR(Manager.WvwStats.LeftTeam, map), match.GetDeltaKDR(delta5, Manager.WvwStats.LeftTeam, map), match.GetDeltaKDR(delta15, Manager.WvwStats.LeftTeam, map));
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", Manager.WvwStats.RightWorld, match.GetKDR(Manager.WvwStats.RightTeam, map), match.GetDeltaKDR(delta5, Manager.WvwStats.RightTeam, map), match.GetDeltaKDR(delta15, Manager.WvwStats.RightTeam, map));
-            builder.AppendLine();
-            builder.AppendLine("Blue");
-            map = "Blue";
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", "JQ", match.GetKDR(Manager.Team, map), match.GetDeltaKDR(delta5, Manager.Team, map), match.GetDeltaKDR(delta15, Manager.Team, map));
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", Manager.WvwStats.LeftWorld, match.GetKDR(Manager.WvwStats.LeftTeam, map), match.GetDeltaKDR(delta5, Manager.WvwStats.LeftTeam, map), match.GetDeltaKDR(delta15, Manager.WvwStats.LeftTeam, map));
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", Manager.WvwStats.RightWorld, match.GetKDR(Manager.WvwStats.RightTeam, map), match.GetDeltaKDR(delta5, Manager.WvwStats.RightTeam, map), match.GetDeltaKDR(delta15, Manager.WvwStats.RightTeam, map));
-            builder.AppendLine();
-            builder.AppendLine("EBG");
-            map = "EBG";
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", "JQ", match.GetKDR(Manager.Team, map), match.GetDeltaKDR(delta5, Manager.Team, map), match.GetDeltaKDR(delta15, Manager.Team, map));
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", Manager.WvwStats.LeftWorld, match.GetKDR(Manager.WvwStats.LeftTeam, map), match.GetDeltaKDR(delta5, Manager.WvwStats.LeftTeam, map), match.GetDeltaKDR(delta15, Manager.WvwStats.LeftTeam, map));
-            builder.AppendFormat("{0}: KDR = {1}, Last5 = {2}, Last15 = {3}\n", Manager.WvwStats.RightWorld, match.GetKDR(Manager.WvwStats.RightTeam, map), match.GetDeltaKDR(delta5, Manager.WvwStats.RightTeam, map), match.GetDeltaKDR(delta15, Manager.WvwStats.RightTeam, map));
-            builder.AppendLine();
-
-            wvwTabLabel.Text = builder.ToString();
-            wvwTabLabel.Refresh();
+            trackingLabel.Text = Manager.WvwStats.LastUpdateTime.ToString("yyyyMMdd HH:mm:ss") + "\n\n" + Manager.WvwStats.LeftTracking + "\n\n" + Manager.WvwStats.RightTracking;
         }
 
         private void squadUpdateButton_Click(object sender, EventArgs e)

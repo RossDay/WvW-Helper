@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using GW2NET.Common.Drawing;
 using GW2NET.WorldVersusWorld;
+
 
 namespace Sandbox
 {
@@ -125,6 +127,104 @@ namespace Sandbox
             }
 
             return objectives;
+        }
+
+
+        private static readonly Dictionary<string, Vector2D> MapCenters = new Dictionary<string, Vector2D>
+        {
+            { "RedHome", new Vector2D(10728, 10688) },
+            { "GreenHome", new Vector2D(6906, 13530) },
+            { "BlueHome", new Vector2D(14088, 12932) },
+            { "Center", new Vector2D(10626, 14575) }
+        };
+
+        private static readonly Dictionary<string, string> EBGShortNames = new Dictionary<string, string>
+        {
+            { "Aldon's Ledge", "Aldon" },
+            { "Overlook", "RedKeep" },
+            { "Langor Gulch", "Langor" },
+            { "Mendon's Gap", "Mendon" },
+            { "Danelon Passage", "Danelon" },
+            { "Stonemist Castle", "SMC" },
+            { "Pangloss Rise", "Pangloss" },
+            { "Durios Gulch", "Durios" },
+            { "Veloka Slope", "Veloka" },
+            { "Klovan Gully", "Klovan" },
+            { "Jerrifer's Slough", "Jerri" },
+            { "Speldan Clearcut", "Speldan" },
+            { "Valley", "BlueKeep" },
+            { "Wildcreek Run", "WC" },
+            { "Quentin Lake", "QL" },
+            { "Bravost Escarpment", "Bravost" },
+            { "Ogrewatch Cut", "OW" },
+            { "Golanta Clearing", "Golanta" },
+            { "Umberglade Woods", "Umber" },
+            { "Rogue's Quarry", "Rogue" },
+            { "Anzalias Pass", "Anz" },
+            { "Lowlands", "GreenKeep" },
+        };
+
+        public static string GetShortName(this Objective objective)
+        {
+            if (objective.MapType.EndsWith("Home"))
+            {
+                if (objective.Type.Equals("Tower"))
+                    return GetTowerShortName(objective);
+                else if (objective.Type.Equals("Camp"))
+                    return GetCampShortName(objective);
+                else if (objective.Type.Equals("Keep"))
+                    return GetKeepShortName(objective);
+                return objective.Name;
+            }
+            else
+                return EBGShortNames[objective.Name];
+        }
+
+        private static string GetTowerShortName(Objective objective)
+        {
+            var center = MapCenters[objective.MapType];
+
+            // North vs South
+            var result = ((objective.MapCoordinates.Y < center.Y) ? "N" : "S");
+
+            // East vs West
+            result += ((objective.MapCoordinates.X < center.X) ? "W" : "E");
+
+            return result + "T";
+        }
+
+        private static string GetCampShortName(Objective objective)
+        {
+            var center = MapCenters[objective.MapType];
+
+            // North vs South
+            var result = ((objective.MapCoordinates.Y < center.Y) ? "N" : "S");
+
+            // is it N camp or S camp?
+            if (Math.Abs(center.X - objective.MapCoordinates.X) < 200)
+                return result + "C";
+
+            // East vs West
+            result += ((objective.MapCoordinates.X < center.X) ? "W" : "E");
+
+            return result + "C";
+        }
+
+        private static string GetKeepShortName(Objective objective)
+        {
+            var center = MapCenters[objective.MapType];
+
+            // is it garri?
+            if (Math.Abs(center.X - objective.MapCoordinates.X) < 200)
+                return "Garri";
+
+            // East vs West
+            return ((objective.MapCoordinates.X < center.X) ? "Bay" : "Hills");
+        }
+
+        public static double GetMinutesHeld(this MatchObjective objective)
+        {
+            return (DateTime.Now - Convert.ToDateTime(objective.LastFlipped)).TotalMinutes;
         }
     }
 }

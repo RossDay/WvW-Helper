@@ -20,7 +20,12 @@ namespace Sandbox
             populateStatsTableLabels();
             statsTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             updateStatsTableTeamsAndMaps();
-            updateStatsTable();
+            if (Manager.WvwStats.GetHistoryMatch(0) != null)
+            {
+                updateStatsTable();
+                updateWvwStatsTab();
+                updateHistoryTab();
+            }
 
             label1.Text = Manager.Mode.ToString();
             mapCurrentNameLabel.Text = Manager.Map;

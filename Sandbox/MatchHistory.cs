@@ -28,6 +28,9 @@ namespace Sandbox
 
         public Match GetHistoryMatch(int interval)
         {
+            if (Matches.Count == 0)
+                return null;
+
             var delta = Matches.First;
             for (int i = 0; i < interval; i++)
                 if (delta.Next == null)

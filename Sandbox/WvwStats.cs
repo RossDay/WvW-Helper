@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GW2NET;
@@ -16,6 +17,7 @@ namespace Sandbox
         private static readonly int[] Intervals = new int[] { 0, 5, 10, 15, 20, 30, 60 };
         private readonly Dictionary<string, string> CurrentTeams = new Dictionary<string, string>();
         private readonly Dictionary<string, string> CurrentWorlds = new Dictionary<string, string>();
+        public readonly Dictionary<string, Objective> Objectives = new Dictionary<string, Objective>();
 
         private GW2Bootstrapper GW2 { get; set; }
         private ITeamMapGetter Getter { get; set; }
@@ -59,14 +61,28 @@ namespace Sandbox
             initialize();
         }
 
+        private Task populateObjectives()
+        {
+            return Task.Run(() =>
+            {
+                var mapIds = new int[] { 95, 96, 1099, 38 };
+                var repo = GW2.V2.WorldVersusWorld.Objectives.ForDefaultCulture(); 
+                var objs = repo.FindAll().Where(o => mapIds.Contains(o.Value.MapId));
+                foreach (var kv in objs)
+                    Objectives.Add(kv.Key, kv.Value);
+            });
+        }
+
         private void initialize()
         {
+            var objTask = populateObjectives();
+
             var matchWorlds = CurrentMatch.Worlds;
 
             var worldRepo = GW2.V2.Worlds.ForDefaultCulture();
             var worlds = new World[] {
                 worldRepo.Find(matchWorlds.Red),
-                worldRepo.Find(matchWorlds.Green),
+                worldRepo.Find(matchWorlds.Green), 
                 worldRepo.Find(matchWorlds.Blue)
             };
 
@@ -89,6 +105,8 @@ namespace Sandbox
             CurrentTeams[OurTeam] = "Our";
             CurrentTeams[LeftTeam] = "Left";
             CurrentTeams[RightTeam] = "Right";
+
+            objTask.Wait();
         }
 
         private Task dbTask = null;
@@ -129,6 +147,8 @@ namespace Sandbox
                 writeOurDeltaRatioMessages(i);
             }
             writeOurMapRatioMessages();
+            writeTracking(LeftTeam);
+            writeTracking(RightTeam);
         }
 
         private void writeRatioMessages(int interval)
@@ -275,6 +295,53 @@ namespace Sandbox
             return builder.ToString();
         }
 
+        private static string[] TrackedObjectiveTypes = new string[] { "Castle", "Keep", "Tower", "Camp" };
+        private void writeTracking(string team)
+        {
+            var match = MatchHistory.GetHistoryMatch(0);
+            var delta = MatchHistory.GetHistoryMatch(10);
+
+            Ini.Write(CurrentTeams[team] + "1", "\"Tracking " + CurrentWorlds[team] + " with 10m stats...\"", "WVWTracking");
+            var i = 2;
+            foreach (var map in new string[] { "Red", "Green", "Blue", "EBG" })
+            {
+                var mapObjName = (map.Equals("EBG") ? "Center" : map + "Home");
+                var objs = match.Maps.First(m => m.Type.Equals(mapObjName))
+                    .Objectives.Where(o => TrackedObjectiveTypes.Contains(o.Type) && o.Owner.ToString().Equals(team) && o.GetMinutesHeld() < 15)
+                    .OrderByDescending(o => Convert.ToDateTime(o.LastFlipped))
+                    .Take(3).ToList();
+
+                var mapName = (map.Equals("EBG") ? map : CurrentWorlds[map] + "BL");
+
+                var kills = match.GetDeltaKillsFor(delta, team, map);
+                var deaths = match.GetDeltaDeathsFor(delta, team, map);
+
+                var s = new StringBuilder();
+                s.Append("\"")
+                    .Append(mapName)
+                    .Append(": K=")
+                    .Append(kills)
+                    .Append(", D=")
+                    .Append(deaths)
+                    .Append(", Flips=");
+                if (objs.Count == 0)
+                    s.Append("None");
+                else
+                {
+                    foreach (var o in objs)
+                        s.Append(Objectives[o.ObjectiveId].GetShortName())
+                            .Append(" (")
+                            .Append(Math.Round(Convert.ToDecimal(o.GetMinutesHeld()), 1))
+                            .Append("m), ");
+                    s.Length -= 2;
+                }
+                s.Append("\"");
+
+                Ini.Write(CurrentTeams[team] + (i++).ToString(), s.ToString(), "WVWTracking");
+            }
+        }
+
+        #region SQLite Database
         private void writeToDatabase()
         {
             using (SQLiteConnection conn = new SQLiteConnection(@"Data Source=C:\rday\wvwhistory.sqlite;Version=3"))
@@ -518,7 +585,7 @@ namespace Sandbox
             }
 
         }
-
+        #endregion
 
         //public decimal
 

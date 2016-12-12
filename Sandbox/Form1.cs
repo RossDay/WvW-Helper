@@ -148,7 +148,7 @@ namespace Sandbox
 
         private void updateTrackingTab()
         {
-            trackingLabel.Text = Manager.WvwStats.LastUpdateTime.ToString("yyyyMMdd HH:mm:ss") + "\n\n" + Manager.WvwStats.LeftTracking + "\n\n" + Manager.WvwStats.RightTracking;
+            trackingLabel.Text = Manager.WvwStats.LastUpdateTime.ToString("yyyyMMdd HH:mm:ss") + "\n\n" + Manager.WvwStats.LeftTracking + "\n\n" + Manager.WvwStats.RightTracking + "\n\n" + Manager.WvwStats.CurrentMapDetails;
         }
 
         private void squadUpdateButton_Click(object sender, EventArgs e)

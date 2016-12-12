@@ -31,6 +31,7 @@ namespace Sandbox
         public string RightWorld { get; private set; }
         public string LeftTracking { get; private set; }
         public string RightTracking { get; private set; }
+        public string CurrentMapDetails { get; private set; }
         public string GetWorldByTeam(string team)
         {
             return CurrentWorlds[team];
@@ -53,6 +54,7 @@ namespace Sandbox
             get { return MatchHistory.LastUpdateTime; }
         }
 
+        #region Constructor / Initialize
         public WvwStats(ITeamMapGetter getter, IniFile ini)
         {
             GW2 = new GW2Bootstrapper();
@@ -91,7 +93,7 @@ namespace Sandbox
             var worldRepo = GW2.V2.Worlds.ForDefaultCulture();
             var worlds = new World[] {
                 await worldRepo.FindAsync(matchWorlds.Red),
-                await worldRepo.FindAsync(matchWorlds.Green), 
+                await worldRepo.FindAsync(matchWorlds.Green),
                 await worldRepo.FindAsync(matchWorlds.Blue)
             };
 
@@ -116,7 +118,8 @@ namespace Sandbox
             CurrentTeams[RightTeam] = "Right";
 
             await objTask;
-        }
+        } 
+        #endregion
 
         private Task dbTask = null;
         public async Task<bool> maybeUpdateStats()
@@ -147,8 +150,18 @@ namespace Sandbox
                     writeOurDeltaRatioMessages(i);
                 }
                 writeOurMapRatioMessages();
-                LeftTracking = writeTracking(LeftTeam);
-                RightTracking = writeTracking(RightTeam);
+                LeftTracking = writeTeamTracking(LeftTeam);
+                RightTracking = writeTeamTracking(RightTeam);
+                foreach (var m in MapList)
+                {
+                    if (m == null)
+                        continue;
+
+                    var details = writeMapDetailStats(m);
+
+                    if (m.Equals(Getter.Map))
+                        CurrentMapDetails = details;
+                }
             });
         }
 
@@ -283,7 +296,7 @@ namespace Sandbox
 
         #region Writing Tracking
         private static string[] TrackedObjectiveTypes = new string[] { "Castle", "Keep", "Tower", "Camp" };
-        private string writeTracking(string team)
+        private string writeTeamTracking(string team)
         {
             var match = MatchHistory.GetHistoryMatch(0);
             var delta = MatchHistory.GetHistoryMatch(10);
@@ -333,6 +346,59 @@ namespace Sandbox
             return result.ToString();
         } 
         #endregion
+
+        private string writeMapDetailStats(string map)
+        {
+            var match = MatchHistory.GetHistoryMatch(0);
+            var delta = MatchHistory.GetHistoryMatch(10);
+            var result = new StringBuilder();
+
+            var key = (map.Equals("EBG") ? "EBG" : CurrentTeams[map]);
+            var mapName = (map.Equals("EBG") ? map : CurrentWorlds[map] + "BL");
+
+            result.Append("Last 10m details for " + mapName + "...");
+            Ini.Write(key + "1", "\"" + result.ToString() + "\"", "WVWMapDetails");
+            result.AppendLine();
+
+            var mapObjName = (map.Equals("EBG") ? "Center" : map + "Home");
+            var allObjs = match.Maps.First(m => m.Type.Equals(mapObjName))
+                .Objectives.Where(o => TrackedObjectiveTypes.Contains(o.Type) && o.GetMinutesHeld() < 15)
+                .OrderByDescending(o => Convert.ToDateTime(o.LastFlipped))
+                .ToList();
+
+            var i = 2;
+            foreach (var team in TeamList)
+            {
+                var objs = allObjs.Where(o => o.Owner.ToString().Equals(team)).Take(3).ToList();
+
+                var kills = match.GetDeltaKillsFor(delta, team, map);
+                var deaths = match.GetDeltaDeathsFor(delta, team, map);
+
+                var s = new StringBuilder();
+                s.Append(CurrentWorlds[team])
+                    .Append(": K=")
+                    .Append(kills)
+                    .Append(", D=")
+                    .Append(deaths)
+                    .Append(", Flips=");
+                if (objs.Count == 0)
+                    s.Append("None");
+                else
+                {
+                    foreach (var o in objs)
+                        s.Append(Objectives[o.ObjectiveId].GetShortName())
+                            .Append(" (")
+                            .Append(Math.Round(Convert.ToDecimal(o.GetMinutesHeld()), 1))
+                            .Append("m), ");
+                    s.Length -= 2;
+                }
+                result.AppendLine(s.ToString());
+
+                Ini.Write(key + (i++).ToString(), "\"" + s.ToString() + "\"", "WVWMapDetails");
+            }
+
+            return result.ToString();
+        }
 
         #region SQLite Database
         private void writeToDatabase()

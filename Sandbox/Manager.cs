@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Speech.Synthesis;
+using System.Threading.Tasks;
 using GW2NET.MumbleLink;
 
 namespace Sandbox
@@ -46,6 +47,11 @@ namespace Sandbox
             Ini = new IniFile("C:\\rday\\rday.ini");
             Links = new MapLinks(this, Ini);
             Mumble = MumbleLinkFile.CreateOrOpen();
+        }
+
+        public async Task Initialize()
+        {
+            WvwStats = new WvwStats(this, Ini);
 
             Mode = Convert.ToInt32(iniRead("mode", "0"));
             MapId = Convert.ToInt32(iniRead("map_id", "0"));
@@ -58,7 +64,7 @@ namespace Sandbox
             SquadMap = iniRead("SquadMap");
             SquadMessage = iniRead("SquadMsg");
 
-            WvwStats = new WvwStats(this, Ini);
+            await WvwStats.Initialize();
         }
 
         public void maybeUpdateMode()
@@ -77,20 +83,24 @@ namespace Sandbox
             Mumble = MumbleLinkFile.CreateOrOpen();
         }
 
-        public bool maybeUpdateStats()
+        public async Task<bool> maybeUpdateStats()
         {
-            return WvwStats.maybeUpdateStats();
+            var b = await WvwStats.maybeUpdateStats();
+            return b;
         }
 
-        public bool maybeUpdateMumble()
+        public async Task<bool> maybeUpdateMumble()
         {
+            var b = await Task.Run(() =>
+            {
+                var a = Mumble.Read();
+                if (a == null || a.Context == null || a.Identity == null)
+                    return false;
 
-            var a = Mumble.Read();
-            if (a == null || a.Context == null || a.Identity == null)
-                return false;
-
-            bool result = maybeUpdateMap(a.Context.MapId);
-            return maybeUpdateTeam(a.Identity.TeamColorId) && result;
+                bool result = maybeUpdateMap(a.Context.MapId);
+                return maybeUpdateTeam(a.Identity.TeamColorId) && result;
+            });
+            return b;
         }
 
         private bool maybeUpdateMap(int newMapId)

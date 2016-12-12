@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GW2NET.WorldVersusWorld;
@@ -8,6 +9,7 @@ namespace Sandbox
     public partial class Form1 : Form
     {
         private Manager Manager;
+        private SynchronizationContext SyncContext;
 
         public Form1()
         {
@@ -15,13 +17,28 @@ namespace Sandbox
 
             DoubleBuffered = true;
 
+            SyncContext = WindowsFormsSynchronizationContext.Current;
             Manager = new Manager();
 
-            populateStatsTableLabels();
-            statsTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            updateStatsTableTeamsAndMaps();
+            Initialize();
+        }
+
+        private async void Initialize()
+        {
+            var t = Task.Run(() =>
+            {
+                populateStatsTableLabels();
+                statsTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            });
+
+            await Manager.Initialize();
+            await t;
+            t = null;
+
             if (Manager.WvwStats.GetHistoryMatch(0) != null)
-                updateStatsTable();
+                t = Task.Run(() => updateStatsTable());
+
+            updateStatsTableTeamsAndMaps();
 
             label1.Text = Manager.Mode.ToString();
             mapCurrentNameLabel.Text = Manager.Map;
@@ -30,6 +47,9 @@ namespace Sandbox
             pinTextBox.Text = Manager.SquadPin;
             squadMapTextBox.Text = Manager.SquadMap;
             squadMessageBox.Text = Manager.SquadMessage;
+
+            if (t != null)
+                await t;
 
             mumbleTimer.Start();
         }
@@ -48,12 +68,20 @@ namespace Sandbox
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            Manager.maybeUpdateMode();
-            label1.Text = Manager.Mode.ToString();
-            label1.Refresh();
-
             if (e.KeyChar.Equals('s'))
+            {
                 Manager.Speak(speechBox.Text);
+
+                Task.Run(() =>
+                {
+                    Manager.maybeUpdateMode();
+                    SyncContext.Post(new SendOrPostCallback(o =>
+                    {
+                        label1.Text = o.ToString();
+                        label1.Refresh();
+                    }), Manager.Mode.ToString());
+                });
+            }
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -77,9 +105,13 @@ namespace Sandbox
             Manager.Speak(speechBox.Text);
         }
 
-        private void mumbleTimer_Tick(object sender, EventArgs e)
+        private async void mumbleTimer_Tick(object sender, EventArgs e)
         {
-            if (Manager.maybeUpdateMumble())
+            var statsUpdateTask = Manager.maybeUpdateStats();
+            var mumbleUpdateTask = Manager.maybeUpdateMumble();
+
+            var mumbleUpdated = await mumbleUpdateTask;
+            if (mumbleUpdated)
             {
                 mumbleTimer.Stop();
                 Manager.resetMumble();
@@ -93,18 +125,25 @@ namespace Sandbox
                 Refresh();
             }
             teamColorIdLabel.Text = Manager.CurrentTeamColorId.ToString();
-            Task t = null;
-            if (Manager.maybeUpdateStats())
+
+            var statsUpdated = await statsUpdateTask;
+
+            var timerText = ( statsUpdated ? "59" : (Convert.ToInt32(timerLabel.Text) - 1).ToString());
+            SyncContext.Post(new SendOrPostCallback(o =>
             {
-                t = Task.Run(() => updateStatsTable());
-                timerLabel.Text = "59";
-                updateTrackingTab();
+                timerLabel.Text = o.ToString();
+                timerLabel.Refresh();
+
+            }), timerText);
+
+            if (statsUpdated)
+            {
+                await Task.Run(() =>
+                {
+                    updateStatsTable();
+                    updateTrackingTab();
+                });
             }
-            else
-                timerLabel.Text = (Convert.ToInt32(timerLabel.Text) - 1).ToString();
-            timerLabel.Refresh();
-            if (t != null)
-                t.Wait();
         }
 
         private void updateTrackingTab()
@@ -188,7 +227,6 @@ namespace Sandbox
             redWorldLabel.Text = Manager.WvwStats.GetWorldByTeam("Red") + "BL\nRed";
             greenWorldLabel.Text = Manager.WvwStats.GetWorldByTeam("Green") + "BL\nGreen";
             blueWorldLabel.Text = Manager.WvwStats.GetWorldByTeam("Blue") + "BL\nBlue";
-            statsTable.Refresh();
         }
 
         private static readonly string[] maps = new string[] { null, null, "Red", "Red", "Red", null,"Green", "Green", "Green", null, "Blue", "Blue", "Blue", null, "EBG", "EBG", "EBG" };
@@ -209,9 +247,17 @@ namespace Sandbox
                 if (r != 5 && r != 9 && r != 13)
                     for (var c = 2; c <= 8; c++)
                         if (c != 5)
-                            ((Label)statsTable.GetControlFromPosition(c, r)).Text = funcs[r](match, deltas[c], teams[c], maps[r]).ToString();
-
-            statsTable.Refresh();
+                        {
+                            SyncContext.Post(new SendOrPostCallback(o =>
+                            {
+                                var n = (int)o;
+                                var r2 = n / 100;
+                                var c2 = n % 100;
+                                var l = ((Label)statsTable.GetControlFromPosition(c2, r2));
+                                l.Text = funcs[r2](match, deltas[c2], teams[c2], maps[r2]).ToString();
+                                l.Refresh();
+                            }), r*100+c);
+                        }
         }
 
         private void button1_Click(object sender, EventArgs e)

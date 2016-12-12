@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using GW2NET.WorldVersusWorld;
 
 namespace Sandbox
@@ -11,9 +12,9 @@ namespace Sandbox
     {
         private LinkedList<KeyValuePair<DateTime, Match>> Matches { get; set; }
 
-        public MatchHistory()
+        public async Task Initialize()
         {
-            Matches = Deserialize();
+            await Task.Run(() => Matches = Deserialize());
         }
 
         public DateTime LastUpdateTime
@@ -40,30 +41,36 @@ namespace Sandbox
             return delta.Value.Value;
         }
 
-        public bool maybeAdd(Match match)
+        public async Task<bool> maybeAdd(Match match)
         {
             var now = DateTime.Now;
-            if ((now - LastUpdateTime).TotalSeconds >= 60.0 || LastUpdateTime == DateTime.MinValue)
+            var b = await Task.Run(() =>
             {
-                if (Matches.Count == 61)
-                    Matches.RemoveLast();
-                Matches.AddFirst(new KeyValuePair<DateTime, Match>(now, match));
-                Serialize();
+                if ((now - LastUpdateTime).TotalSeconds >= 60.0 || LastUpdateTime == DateTime.MinValue)
+                {
+                    if (Matches.Count == 61)
+                        Matches.RemoveLast();
+                    Matches.AddFirst(new KeyValuePair<DateTime, Match>(now, match));
+                    Serialize();
 
-                return true;
-            }
-            return false;
+                    return true;
+                }
+                return false;
+            });
+            return b;
         }
 
         public void clear()
         {
             Matches.Clear();
+            if (File.Exists(MATCH_HISTORY_FILE))
+                File.Delete(MATCH_HISTORY_FILE);
         }
-
+        
         public static readonly string MATCH_HISTORY_FILE = "C:\\rday\\wvwhistory.dat";
         private static readonly DataContractSerializer _Serializer = new DataContractSerializer(typeof(LinkedList<KeyValuePair<DateTime, Match>>), new Type[] { typeof(RedBorderlands), typeof(GreenBorderlands), typeof(BlueBorderlands), typeof(EternalBattlegrounds), typeof(Bloodlust) });
 
-        public void Serialize()
+        private void Serialize()
         {
             using (FileStream fs = File.Create(MATCH_HISTORY_FILE))
             {
@@ -71,7 +78,7 @@ namespace Sandbox
             }
         }
 
-        public static LinkedList<KeyValuePair<DateTime, Match>> Deserialize()
+        private static LinkedList<KeyValuePair<DateTime, Match>> Deserialize()
         {
             if (File.Exists(MATCH_HISTORY_FILE))
             {

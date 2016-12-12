@@ -42,9 +42,10 @@ namespace Sandbox
             return MatchHistory.GetHistoryMatch(interval);
         }
 
-        private Match CurrentMatch 
+        private async Task<Match> GetCurrentMatch()
         {
-            get { return GW2.V2.WorldVersusWorld.MatchesByWorld.Find(1008); }
+            var m = await GW2.V2.WorldVersusWorld.MatchesByWorld.FindAsync(1008);
+            return m;
         }
 
         public DateTime LastUpdateTime
@@ -59,39 +60,39 @@ namespace Sandbox
             Ini = ini;
             MatchHistory = new MatchHistory();
             maybeCreateDatabase();
-            initialize();
         }
 
-        public void reset()
+        public async void reset()
         {
             MatchHistory.clear();
-            initialize();
+            await Initialize();
         }
 
-        private Task populateObjectives()
+        private async Task populateObjectives()
         {
-            return Task.Run(() =>
-            {
-                var mapIds = new int[] { 95, 96, 1099, 38 };
-                var repo = GW2.V2.WorldVersusWorld.Objectives.ForDefaultCulture(); 
-                var objs = repo.FindAll().Where(o => mapIds.Contains(o.Value.MapId));
-                foreach (var kv in objs)
-                    if (!Objectives.ContainsKey(kv.Key))
-                        Objectives.Add(kv.Key, kv.Value);
-            });
+            var mapIds = new int[] { 95, 96, 1099, 38 };
+            var repo = GW2.V2.WorldVersusWorld.Objectives.ForDefaultCulture();
+            var allObjs = await repo.FindAllAsync();
+            var objs = allObjs.Where(o => mapIds.Contains(o.Value.MapId));
+            foreach (var kv in objs)
+                if (!Objectives.ContainsKey(kv.Key))
+                    Objectives.Add(kv.Key, kv.Value);
         }
 
-        private void initialize()
+        public async Task Initialize()
         {
             var objTask = populateObjectives();
 
-            var matchWorlds = CurrentMatch.Worlds;
+            await MatchHistory.Initialize();
+
+            var currentMatch = await GetCurrentMatch();
+            var matchWorlds = currentMatch.Worlds;
 
             var worldRepo = GW2.V2.Worlds.ForDefaultCulture();
             var worlds = new World[] {
-                worldRepo.Find(matchWorlds.Red),
-                worldRepo.Find(matchWorlds.Green), 
-                worldRepo.Find(matchWorlds.Blue)
+                await worldRepo.FindAsync(matchWorlds.Red),
+                await worldRepo.FindAsync(matchWorlds.Green), 
+                await worldRepo.FindAsync(matchWorlds.Blue)
             };
 
             CurrentWorlds["Red"] = worlds[0].AbbreviatedName;
@@ -114,15 +115,17 @@ namespace Sandbox
             CurrentTeams[LeftTeam] = "Left";
             CurrentTeams[RightTeam] = "Right";
 
-            objTask.Wait();
+            await objTask;
         }
 
         private Task dbTask = null;
-        public bool maybeUpdateStats()
+        public async Task<bool> maybeUpdateStats()
         {
-            if (MatchHistory.maybeAdd(CurrentMatch))
+            var currentMatch = await GetCurrentMatch();
+            var matchAdded = await MatchHistory.maybeAdd(currentMatch);
+            if (matchAdded)
             {
-                writeStats();
+                await writeStats();
                 if (dbTask != null && !dbTask.IsCompleted)
                 {
                     dbTask.Wait();
@@ -134,29 +137,19 @@ namespace Sandbox
             return false;
         }
 
-        private void write(string key, string value, string section = "WVW")
+        private async Task writeStats()
         {
-            Ini.Write(key, value, section);
-        }
-        private void write(string key, int value, string section = "WVW")
-        {
-            Ini.Write(key, value.ToString(), section);
-        }
-        private void write(string key, decimal value, string section = "WVW")
-        {
-            Ini.Write(key, value.ToString(), section);
-        }
-
-        private void writeStats()
-        {
-            foreach (var i in Intervals)
+            await Task.Run(() =>
             {
-                writeRatioMessages(i);
-                writeOurDeltaRatioMessages(i);
-            }
-            writeOurMapRatioMessages();
-            LeftTracking = writeTracking(LeftTeam);
-            RightTracking = writeTracking(RightTeam);
+                foreach (var i in Intervals)
+                {
+                    writeRatioMessages(i);
+                    writeOurDeltaRatioMessages(i);
+                }
+                writeOurMapRatioMessages();
+                LeftTracking = writeTracking(LeftTeam);
+                RightTracking = writeTracking(RightTeam);
+            });
         }
 
         #region Writing Ratios
@@ -586,12 +579,5 @@ namespace Sandbox
 
         }
         #endregion
-
-        //public decimal
-
-        private void foo()
-        {
-        }
-
     }
 }

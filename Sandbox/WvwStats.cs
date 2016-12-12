@@ -53,6 +53,14 @@ namespace Sandbox
         {
             get { return MatchHistory.LastUpdateTime; }
         }
+        public DateTime SkirmishTime
+        {
+            get { return MatchHistory.SkirmishTime; }
+        }
+        public DateTime TimezoneTime
+        {
+            get { return MatchHistory.TimezoneTime; }
+        }
 
         #region Constructor / Initialize
         public WvwStats(ITeamMapGetter getter, IniFile ini)

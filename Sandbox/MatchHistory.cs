@@ -14,11 +14,11 @@ namespace Sandbox
         [DataMember]
         private LinkedList<KeyValuePair<DateTime, Match>> Matches { get; set; }
         [DataMember]
-        private DateTime SkirmishTime { get; set; }
+        public DateTime SkirmishTime { get; private set; }
         [DataMember]
         public Match SkirmishMatch { get; private set; }
         [DataMember]
-        private DateTime TimezoneTime { get; set; }
+        public DateTime TimezoneTime { get; private set; }
         [DataMember]
         public Match TimezoneMatch { get; private set; }
 
@@ -52,13 +52,13 @@ namespace Sandbox
             var b = await Task.Run(() =>
             {
                 var needToSerialize = false;
-                if (!AreSameSkirmish(now, SkirmishTime))
+                if (!AreSameSkirmish(SkirmishTime, now))
                 {
                     SkirmishTime = now;
                     SkirmishMatch = match;
                     needToSerialize = true;
                 }
-                if (!AreSameTimezone(now, TimezoneTime))
+                if (!AreSameTimezone(TimezoneTime, now))
                 {
                     TimezoneTime = now;
                     TimezoneMatch = match;
@@ -114,12 +114,12 @@ namespace Sandbox
                 }
                 catch (SerializationException)
                 {
-                    return new MatchHistory() { Matches = new LinkedList<KeyValuePair<DateTime, Match>>() };
+                    return new MatchHistory() { Matches = new LinkedList<KeyValuePair<DateTime, Match>>(), SkirmishTime = DateTime.MinValue, TimezoneTime = DateTime.MinValue };
                 }
             }
             else
             {
-                return new MatchHistory() { Matches = new LinkedList<KeyValuePair<DateTime, Match>>() };
+                return new MatchHistory() { Matches = new LinkedList<KeyValuePair<DateTime, Match>>(), SkirmishTime = DateTime.MinValue, TimezoneTime = DateTime.MinValue };
             }
         }
 
@@ -136,6 +136,9 @@ namespace Sandbox
 
         private static bool AreSameSkirmish(DateTime existing, DateTime current)
         {
+            if (existing == null || existing.Year < 2000)
+                return false;
+
             var utcExisting = existing.ToUniversalTime();
             var utcCurrent = current.ToUniversalTime();
             if (!utcExisting.Date.Equals(utcCurrent.Date))
@@ -148,6 +151,9 @@ namespace Sandbox
 
         private static bool AreSameTimezone(DateTime existing, DateTime current)
         {
+            if (existing == null || existing.Year < 2000)
+                return false;
+
             var adjExisting = existing.AddHours(5);
             var adjCurrent = existing.AddHours(5);
             if (!adjExisting.Date.Equals(adjCurrent.Date))

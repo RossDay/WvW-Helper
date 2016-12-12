@@ -8,14 +8,19 @@ using GW2NET.WorldVersusWorld;
 
 namespace Sandbox
 {
+    [DataContract]
     class MatchHistory : IEnumerable<KeyValuePair<DateTime, Match>>
     {
+        [DataMember]
         private LinkedList<KeyValuePair<DateTime, Match>> Matches { get; set; }
-
-        public async Task Initialize()
-        {
-            await Task.Run(() => Matches = Deserialize());
-        }
+        [DataMember]
+        private DateTime SkirmishTime { get; set; }
+        [DataMember]
+        public Match SkirmishMatch { get; private set; }
+        [DataMember]
+        private DateTime TimezoneTime { get; set; }
+        [DataMember]
+        public Match TimezoneMatch { get; private set; }
 
         public DateTime LastUpdateTime
         {
@@ -46,16 +51,29 @@ namespace Sandbox
             var now = DateTime.Now;
             var b = await Task.Run(() =>
             {
+                var needToSerialize = false;
+                if (!AreSameSkirmish(now, SkirmishTime))
+                {
+                    SkirmishTime = now;
+                    SkirmishMatch = match;
+                    needToSerialize = true;
+                }
+                if (!AreSameTimezone(now, TimezoneTime))
+                {
+                    TimezoneTime = now;
+                    TimezoneMatch = match;
+                    needToSerialize = true;
+                }
                 if ((now - LastUpdateTime).TotalSeconds >= 60.0 || LastUpdateTime == DateTime.MinValue)
                 {
                     if (Matches.Count == 61)
                         Matches.RemoveLast();
                     Matches.AddFirst(new KeyValuePair<DateTime, Match>(now, match));
-                    Serialize();
-
-                    return true;
+                    needToSerialize = true;
                 }
-                return false;
+                if (needToSerialize)
+                    Serialize();
+                return needToSerialize;
             });
             return b;
         }
@@ -68,35 +86,40 @@ namespace Sandbox
         }
         
         public static readonly string MATCH_HISTORY_FILE = "C:\\rday\\wvwhistory.dat";
-        private static readonly DataContractSerializer _Serializer = new DataContractSerializer(typeof(LinkedList<KeyValuePair<DateTime, Match>>), new Type[] { typeof(RedBorderlands), typeof(GreenBorderlands), typeof(BlueBorderlands), typeof(EternalBattlegrounds), typeof(Bloodlust) });
+        private static readonly DataContractSerializer _Serializer = new DataContractSerializer(typeof(MatchHistory), new Type[] { typeof(Match), typeof(RedBorderlands), typeof(GreenBorderlands), typeof(BlueBorderlands), typeof(EternalBattlegrounds), typeof(Bloodlust) });
 
         private void Serialize()
         {
             using (FileStream fs = File.Create(MATCH_HISTORY_FILE))
             {
-                _Serializer.WriteObject(fs, Matches);
+                _Serializer.WriteObject(fs, this);
             }
         }
 
-        private static LinkedList<KeyValuePair<DateTime, Match>> Deserialize()
+        public static async Task<MatchHistory> CreateAsync()
         {
+            var mh = await Task.Run(() => MatchHistory.Create());
+            return mh;
+        }
+        private static MatchHistory Create()
+        { 
             if (File.Exists(MATCH_HISTORY_FILE))
             {
                 try
                 {
                     using (FileStream fs = File.OpenRead(MATCH_HISTORY_FILE))
                     {
-                        return (LinkedList<KeyValuePair<DateTime, Match>>)_Serializer.ReadObject(fs);
+                        return (MatchHistory)_Serializer.ReadObject(fs);
                     }
                 }
                 catch (SerializationException)
                 {
-                    return new LinkedList<KeyValuePair<DateTime, Match>>();
+                    return new MatchHistory() { Matches = new LinkedList<KeyValuePair<DateTime, Match>>() };
                 }
             }
             else
             {
-                return new LinkedList<KeyValuePair<DateTime, Match>>();
+                return new MatchHistory() { Matches = new LinkedList<KeyValuePair<DateTime, Match>>() };
             }
         }
 
@@ -109,5 +132,31 @@ namespace Sandbox
         {
             return GetEnumerator();
         }
+
+
+        private static bool AreSameSkirmish(DateTime existing, DateTime current)
+        {
+            var utcExisting = existing.ToUniversalTime();
+            var utcCurrent = current.ToUniversalTime();
+            if (!utcExisting.Date.Equals(utcCurrent.Date))
+                return false;
+
+            var existingSkirmish = utcExisting.Hour / 2;
+            var currentSkirmish = utcCurrent.Hour / 2;
+            return existingSkirmish.Equals(currentSkirmish);
+        }
+
+        private static bool AreSameTimezone(DateTime existing, DateTime current)
+        {
+            var adjExisting = existing.AddHours(5);
+            var adjCurrent = existing.AddHours(5);
+            if (!adjExisting.Date.Equals(adjCurrent.Date))
+                return false;
+
+            var existingTimezone = adjExisting.Hour / 6;
+            var currentTimezone = adjCurrent.Hour / 6;
+            return existingTimezone.Equals(currentTimezone);
+        }
+
     }
 }

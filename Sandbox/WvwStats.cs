@@ -14,7 +14,7 @@ namespace Sandbox
     {
         private static readonly string[] TeamList = new string[] { "Red", "Green", "Blue" };
         private static readonly string[] MapList = new string[] { null, "Red", "Green", "Blue", "EBG" };
-        private static readonly int[] Intervals = new int[] { 0, 5, 10, 15, 20, 30, 60 };
+        private static readonly int[] Intervals = new int[] { 5, 10, 15, 20, 30, 60, -1, -2, 0 };
         private readonly Dictionary<string, string> CurrentTeams = new Dictionary<string, string>();
         private readonly Dictionary<string, string> CurrentWorlds = new Dictionary<string, string>();
         public readonly Dictionary<string, Objective> Objectives = new Dictionary<string, Objective>();
@@ -60,7 +60,6 @@ namespace Sandbox
             GW2 = new GW2Bootstrapper();
             Getter = getter;
             Ini = ini;
-            MatchHistory = new MatchHistory();
             maybeCreateDatabase();
         }
 
@@ -85,7 +84,7 @@ namespace Sandbox
         {
             var objTask = populateObjectives();
 
-            await MatchHistory.Initialize();
+            MatchHistory = await MatchHistory.CreateAsync();
 
             var currentMatch = await GetCurrentMatch();
             var matchWorlds = currentMatch.Worlds;
@@ -169,7 +168,28 @@ namespace Sandbox
         private void writeRatioMessages(int interval)
         {
             var currentMatch = MatchHistory.GetHistoryMatch(0);
-            var deltaMatch = (interval == 0 ? null : GetHistoryMatch(interval));
+
+            Match deltaMatch = null;
+            var intervalKey = "0";
+            var intervalDesc = "Total";
+            if (interval > 0)
+            {
+                deltaMatch = MatchHistory.GetHistoryMatch(interval);
+                intervalKey = interval.ToString();
+                intervalDesc = "Last " + intervalKey + "m";
+            }
+            else if (interval == -1)
+            {
+                deltaMatch = MatchHistory.SkirmishMatch;
+                intervalKey = "Skirmish";
+                intervalDesc = "Skirmish";
+            }
+            else if (interval == -2)
+            {
+                deltaMatch = MatchHistory.TimezoneMatch;
+                intervalKey = "Timezone";
+                intervalDesc = "Timezone";
+            }
 
             var builder = new StringBuilder();
             foreach (string map in MapList)
@@ -191,10 +211,7 @@ namespace Sandbox
                     key = CurrentTeams[map];
                 }
                 builder.Append(" ");
-                if (interval == 0)
-                    builder.Append("Total");
-                else
-                    builder.Append("Last ").Append(interval).Append("m");
+                builder.Append(intervalDesc);
                 builder.Append(" KDR: ");
                 builder.Append(OurWorld).Append(" = ");
                 builder.Append(currentMatch.GetDeltaKDR(deltaMatch, OurTeam, map));
@@ -208,21 +225,39 @@ namespace Sandbox
                 var msg = builder.ToString();
                 builder.Clear();
 
-                Ini.Write(key + "KDR" + interval.ToString(), "\"" + msg + "\"", "WVW");
+                Ini.Write(key + "KDR" + intervalKey, "\"" + msg + "\"", "WVW");
             }
         }
 
         private void writeOurDeltaRatioMessages(int interval)
         {
             var currentMatch = MatchHistory.GetHistoryMatch(0);
-            var deltaMatch = (interval == 0 ? null : GetHistoryMatch(interval));
+            //var deltaMatch = (interval == 0 ? null : GetHistoryMatch(interval));
+            Match deltaMatch = null;
+            var intervalKey = "0";
+            var intervalDesc = "Total";
+            if (interval > 0)
+            {
+                deltaMatch = MatchHistory.GetHistoryMatch(interval);
+                intervalKey = interval.ToString();
+                intervalDesc = "Last " + intervalKey + "m";
+            }
+            else if (interval == -1)
+            {
+                deltaMatch = MatchHistory.SkirmishMatch;
+                intervalKey = "Skirmish";
+                intervalDesc = "Skirmish";
+            }
+            else if (interval == -2)
+            {
+                deltaMatch = MatchHistory.TimezoneMatch;
+                intervalKey = "Timezone";
+                intervalDesc = "Timezone";
+            }
 
             var builder = new StringBuilder();
             builder.Append(OurWorld).Append(" ");
-            if (interval == 0)
-                builder.Append("Total");
-            else
-                builder.Append("Last ").Append(interval).Append("m");
+            builder.Append(intervalDesc);
             builder.Append(" KDR: ");
             foreach (string map in MapList)
             {
@@ -241,7 +276,7 @@ namespace Sandbox
             var msg = builder.ToString();
             builder.Clear();
 
-            Ini.Write("OurKDR" + interval.ToString(), "\"" + msg + "\"", "OurDeltas");
+            Ini.Write("OurKDR" + intervalKey, "\"" + msg + "\"", "OurDeltas");
         }
 
         private void writeOurMapRatioMessages()
@@ -274,12 +309,26 @@ namespace Sandbox
                     if (interval == 10 || interval == 20)
                         continue;
 
-                    var deltaMatch = (interval == 0 ? null : GetHistoryMatch(interval));
+                    //var deltaMatch = (interval == 0 ? null : GetHistoryMatch(interval));
+                    Match deltaMatch = null;
+                    var intervalDesc = "Total";
+                    if (interval > 0)
+                    {
+                        deltaMatch = MatchHistory.GetHistoryMatch(interval);
+                        intervalDesc = interval.ToString() + "m";
+                    }
+                    else if (interval == -1)
+                    {
+                        deltaMatch = MatchHistory.SkirmishMatch;
+                        intervalDesc = "Skirmish";
+                    }
+                    else if (interval == -2)
+                    {
+                        deltaMatch = MatchHistory.TimezoneMatch;
+                        intervalDesc = "Timezone";
+                    }
 
-                    if (interval == 0)
-                        builder.Append("Total");
-                    else
-                        builder.Append(interval).Append("m");
+                    builder.Append(intervalDesc);
                     builder.Append(" = ");
                     builder.Append(currentMatch.GetDeltaKDR(deltaMatch, OurTeam, map));
                     builder.Append(", ");

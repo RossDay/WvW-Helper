@@ -8,7 +8,7 @@ namespace Sandbox
     class Manager : ITeamMapGetter
     {
         private static readonly Dictionary<int, string> _TeamColorDict = new Dictionary<int, string>()
-        { { 9, "Blue" }, { 55, "Green" } };
+        { { 9, "Blue" }, { 55, "Green" }, { 376, "Red" } };
         private static readonly Dictionary<int, string> _MapDict = new Dictionary<int, string>()
         { { 95, "Green" }, { 96, "Blue" }, { 1099, "Red" }, { 38, "EBG" } };
 
@@ -24,6 +24,7 @@ namespace Sandbox
         public string SquadMessage { get; set; }
 
         public int TeamColorId { get; private set; }
+        public int CurrentTeamColorId { get; private set; }
         public string Team { get; private set; }
         public int MapId { get; private set; }
         public string Map { get; private set; }
@@ -120,6 +121,7 @@ namespace Sandbox
 
         private bool maybeUpdateTeam(int newColorId)
         {
+            CurrentTeamColorId = newColorId;
             if (TeamColorId.Equals(newColorId))
                 return false;
 

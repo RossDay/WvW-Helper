@@ -76,7 +76,8 @@ namespace Sandbox
                 var repo = GW2.V2.WorldVersusWorld.Objectives.ForDefaultCulture(); 
                 var objs = repo.FindAll().Where(o => mapIds.Contains(o.Value.MapId));
                 foreach (var kv in objs)
-                    Objectives.Add(kv.Key, kv.Value);
+                    if (!Objectives.ContainsKey(kv.Key))
+                        Objectives.Add(kv.Key, kv.Value);
             });
         }
 

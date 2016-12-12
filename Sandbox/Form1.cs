@@ -92,6 +92,7 @@ namespace Sandbox
                 updateStatsTableTeamsAndMaps();
                 Refresh();
             }
+            teamColorIdLabel.Text = Manager.CurrentTeamColorId.ToString();
             Task t = null;
             if (Manager.maybeUpdateStats())
             {

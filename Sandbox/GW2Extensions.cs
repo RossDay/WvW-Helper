@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2NET.Common.Drawing;
 using GW2NET.WorldVersusWorld;
 
@@ -92,6 +93,17 @@ namespace Sandbox
             if (deathDelta == 0)
                 return Convert.ToDecimal(killDelta);
             return Math.Round(Convert.ToDecimal(killDelta) / Convert.ToDecimal(deathDelta), 2);
+        }
+
+        public static Boolean IsEqualTo(this Match current, Match other)
+        {
+            if (!current.Kills.Equals(other.Kills) || !current.Deaths.Equals(other.Deaths))
+                return false;
+
+            var currentLastFlip = current.Maps.Max(m => m.Objectives.Max(o => Convert.ToDateTime(o.LastFlipped)));
+            var otherLastFlip = other.Maps.Max(m => m.Objectives.Max(o => Convert.ToDateTime(o.LastFlipped)));
+
+            return currentLastFlip.Equals(otherLastFlip);
         }
 
         public static Dictionary<string, Dictionary<string, int>> GetObjectiveCounts(this Match match, string map)

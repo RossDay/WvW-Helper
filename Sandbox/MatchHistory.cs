@@ -38,11 +38,25 @@ namespace Sandbox
                 return null;
 
             var delta = Matches.First;
+            var currentMatch = delta.Value.Value;
             for (int i = 0; i < interval; i++)
                 if (delta.Next == null)
                     return delta.Value.Value;
                 else
                     delta = delta.Next;
+            if (!delta.Value.Value.IsEqualTo(currentMatch))
+                return delta.Value.Value;
+
+            for (int i = 0; i < interval / 5; i++)
+                if (delta.Next == null)
+                    return delta.Value.Value;
+                else
+                {
+                    delta = delta.Next;
+                    if (!delta.Value.Value.IsEqualTo(currentMatch))
+                        return delta.Value.Value;
+                }
+
             return delta.Value.Value;
         }
 

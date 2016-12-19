@@ -129,12 +129,18 @@ namespace Sandbox
         #endregion
 
         private Task dbTask = null;
+        private DateTime lastUpdated = DateTime.MinValue;
         public async Task<bool> maybeUpdateStats()
         {
+            var now = DateTime.UtcNow;
+            if ((now - lastUpdated).TotalSeconds < 55)
+                return false;
+
             var currentMatch = await GetCurrentMatch();
             var matchAdded = await MatchHistory.maybeAdd(currentMatch);
             if (matchAdded)
             {
+                lastUpdated = now;
                 await writeStats();
                 if (dbTask != null && !dbTask.IsCompleted)
                 {

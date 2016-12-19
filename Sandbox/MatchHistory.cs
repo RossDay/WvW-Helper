@@ -155,7 +155,7 @@ namespace Sandbox
                 return false;
 
             var adjExisting = existing.AddHours(5);
-            var adjCurrent = existing.AddHours(5);
+            var adjCurrent = current.AddHours(5);
             if (!adjExisting.Date.Equals(adjCurrent.Date))
                 return false;
 

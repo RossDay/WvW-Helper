@@ -182,6 +182,13 @@ namespace Sandbox
             statsTable.Controls.Add(p, 5, 0);
             statsTable.SetRowSpan(p, 17);
 
+            p = new Panel();
+            p.Anchor = anchor;
+            p.BackColor = System.Drawing.Color.Black;
+            p.Margin = Padding.Empty;
+            statsTable.Controls.Add(p, 9, 0);
+            statsTable.SetRowSpan(p, 17);
+
             foreach (var r in new int[] { 1, 5, 9, 13 })
             {
                 p = new Panel();
@@ -203,13 +210,20 @@ namespace Sandbox
                 p.Margin = Padding.Empty;
                 statsTable.Controls.Add(p, 6, r);
                 statsTable.SetColumnSpan(p, 3);
+
+                p = new Panel();
+                p.Anchor = anchor;
+                p.BackColor = System.Drawing.Color.Black;
+                p.Margin = Padding.Empty;
+                statsTable.Controls.Add(p, 10, r);
+                statsTable.SetColumnSpan(p, 3);
             }
 
             for (var r = 2; r <= 16; r++)
                 if (r != 5 && r != 9 && r != 13)
-                    for (var c = 2; c <= 8; c++)
+                    for (var c = 2; c <= 12; c++)
                     {
-                        if (c == 5)
+                        if (c == 5 || c == 9)
                             continue;
 
                         var l = new Label();
@@ -228,6 +242,9 @@ namespace Sandbox
             redTeamLabel2.Text = Manager.WvwStats.GetWorldByTeam("Red") + "\nRed";
             greenTeamLabel2.Text = Manager.WvwStats.GetWorldByTeam("Green") + "\nGreen";
             blueTeamLabel2.Text = Manager.WvwStats.GetWorldByTeam("Blue") + "\nBlue";
+            redTeamLabel3.Text = Manager.WvwStats.GetWorldByTeam("Red") + "\nRed";
+            greenTeamLabel3.Text = Manager.WvwStats.GetWorldByTeam("Green") + "\nGreen";
+            blueTeamLabel3.Text = Manager.WvwStats.GetWorldByTeam("Blue") + "\nBlue";
 
             redWorldLabel.Text = Manager.WvwStats.GetWorldByTeam("Red") + "BL\nRed";
             greenWorldLabel.Text = Manager.WvwStats.GetWorldByTeam("Green") + "BL\nGreen";
@@ -235,7 +252,7 @@ namespace Sandbox
         }
 
         private static readonly string[] maps = new string[] { null, null, "Red", "Red", "Red", null,"Green", "Green", "Green", null, "Blue", "Blue", "Blue", null, "EBG", "EBG", "EBG" };
-        private static readonly string[] teams = new string[] { "", "", "Red", "Green", "Blue", "", "Red", "Green", "Blue" };
+        private static readonly string[] teams = new string[] { "", "", "Red", "Green", "Blue", "", "Red", "Green", "Blue", "", "Red", "Green", "Blue" };
         private static readonly Func<Match, Match, string, string, Decimal> getKills = new Func<Match, Match, string, string, Decimal>((c, d, t, m) => c.GetDeltaKillsFor(d, t, m));
         private static readonly Func<Match, Match, string, string, Decimal> getDeaths = new Func<Match, Match, string, string, Decimal>((c, d, t, m) => c.GetDeltaDeathsFor(d, t, m));
         private static readonly Func<Match, Match, string, string, Decimal> getKDR = new Func<Match, Match, string, string, Decimal>((c, d, t, m) => c.GetDeltaKDR(d, t, m));
@@ -245,13 +262,14 @@ namespace Sandbox
         {
             var match = Manager.WvwStats.GetHistoryMatch(0);
             var delta5 = Manager.WvwStats.GetHistoryMatch(5);
+            var delta10 = Manager.WvwStats.GetHistoryMatch(10);
             var delta15 = Manager.WvwStats.GetHistoryMatch(15);
-            var deltas = new Match[] { null, null, delta5, delta5, delta5, null, delta15, delta15, delta15 };
+            var deltas = new Match[] { null, null, delta5, delta5, delta5, null, delta10, delta10, delta10, null, delta15, delta15, delta15 };
 
             for (var r = 2; r <= 16; r++)
                 if (r != 5 && r != 9 && r != 13)
-                    for (var c = 2; c <= 8; c++)
-                        if (c != 5)
+                    for (var c = 2; c <= 12; c++)
+                        if (c != 5 && c != 9)
                         {
                             SyncContext.Post(new SendOrPostCallback(o =>
                             {

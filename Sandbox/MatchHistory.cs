@@ -37,27 +37,23 @@ namespace Sandbox
             if (Matches.Count == 0)
                 return null;
 
+            if (interval == 0)
+                return Matches.First.Value.Value;
+
             var delta = Matches.First;
+            var intervalTime = delta.Value.Key.AddMinutes(-1 * interval);
             var currentMatch = delta.Value.Value;
-            for (int i = 0; i < interval; i++)
-                if (delta.Next == null)
-                    return delta.Value.Value;
-                else
-                    delta = delta.Next;
-            if (!delta.Value.Value.IsEqualTo(currentMatch))
+
+            while (delta.Next != null && delta.Next.Value.Key > intervalTime)
+                delta = delta.Next;
+
+            if (delta.Next == null)
                 return delta.Value.Value;
 
-            for (int i = 0; i < interval / 5; i++)
-                if (delta.Next == null)
-                    return delta.Value.Value;
-                else
-                {
-                    delta = delta.Next;
-                    if (!delta.Value.Value.IsEqualTo(currentMatch))
-                        return delta.Value.Value;
-                }
-
-            return delta.Value.Value;
+            if ((intervalTime - delta.Next.Value.Key) < (delta.Value.Key - intervalTime))
+                return delta.Next.Value.Value;
+            else
+                return delta.Value.Value;
         }
 
         public async Task<bool> maybeAdd(Match match)
@@ -78,7 +74,8 @@ namespace Sandbox
                     TimezoneMatch = match;
                     needToSerialize = true;
                 }
-                if ((now - LastUpdateTime).TotalSeconds >= 60.0 || LastUpdateTime == DateTime.MinValue)
+                if (((now - LastUpdateTime).TotalSeconds >= 60.0 || LastUpdateTime == DateTime.MinValue)
+                    && !match.IsEqualTo(Matches.First.Value.Value))
                 {
                     if (Matches.Count == 61)
                         Matches.RemoveLast();

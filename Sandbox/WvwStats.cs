@@ -160,22 +160,83 @@ namespace Sandbox
                 foreach (var i in Intervals)
                 {
                     writeRatioMessages(i);
+                    writeKillDeathStats(i);
                     writeOurDeltaRatioMessages(i);
+                    foreach (var m in MapList)
+                    {
+                        if (m == null)
+                            continue;
+
+                        var details = writeMapDetailStats(m, i);
+
+                        if (m.Equals(Getter.Map))
+                            CurrentMapDetails = details;
+                    }
                 }
                 writeOurMapRatioMessages();
                 LeftTracking = writeTeamTracking(LeftTeam);
                 RightTracking = writeTeamTracking(RightTeam);
-                foreach (var m in MapList)
-                {
-                    if (m == null)
-                        continue;
-
-                    var details = writeMapDetailStats(m);
-
-                    if (m.Equals(Getter.Map))
-                        CurrentMapDetails = details;
-                }
             });
+        }
+
+        private void writeKillDeathStats(int interval)
+        {
+            var currentMatch = MatchHistory.GetHistoryMatch(0);
+
+            Match deltaMatch = null;
+            var intervalKey = "0";
+            var intervalDesc = "Total";
+            if (interval > 0)
+            {
+                deltaMatch = MatchHistory.GetHistoryMatch(interval);
+                intervalKey = interval.ToString();
+                intervalDesc = "Last " + intervalKey + "m";
+            }
+            else if (interval == -1)
+            {
+                deltaMatch = MatchHistory.SkirmishMatch;
+                intervalKey = "Skirmish";
+                intervalDesc = "Skirmish";
+            }
+            else if (interval == -2)
+            {
+                deltaMatch = MatchHistory.TimezoneMatch;
+                intervalKey = "Timezone";
+                intervalDesc = "Timezone";
+            }
+
+            var builder = new StringBuilder();
+            foreach (string map in MapList)
+            {
+                var key = "";
+                if (map == null)
+                {
+                    builder.Append("All Maps");
+                    key = "Total";
+                }
+                else if (map.Equals("EBG"))
+                {
+                    builder.Append("EBG");
+                    key = "EBG";
+                }
+                else
+                {
+                    builder.Append(CurrentWorlds[map]).Append("BL");
+                    key = CurrentTeams[map];
+                }
+                builder.Append(" ");
+                builder.Append(intervalDesc);
+                builder.Append(" Stats for ");
+                builder.Append(OurWorld).Append(": Kills = ");
+                builder.Append(currentMatch.GetDeltaKillsFor(deltaMatch, OurTeam, map));
+                builder.Append(", Deaths = ");
+                builder.Append(currentMatch.GetDeltaDeathsFor(deltaMatch, OurTeam, map));
+
+                var msg = builder.ToString();
+                builder.Clear();
+
+                Ini.Write(key + "Stats" + intervalKey, "\"" + msg + "\"", "OurStats");
+            }
         }
 
         #region Writing Ratios
@@ -407,20 +468,44 @@ namespace Sandbox
             }
 
             return result.ToString();
-        } 
+        }
         #endregion
 
-        private string writeMapDetailStats(string map)
+        #region writeMapDetailStats
+        private string writeMapDetailStats(string map, int interval)
         {
             var match = MatchHistory.GetHistoryMatch(0);
-            var delta = MatchHistory.GetHistoryMatch(10);
+            Match delta = null;
+            var intervalKey = "0";
+            var intervalDesc = "Total";
+            if (interval > 0)
+            {
+                delta = MatchHistory.GetHistoryMatch(interval);
+                intervalKey = interval.ToString();
+                intervalDesc = "Last " + intervalKey + "m";
+            }
+            else if (interval == -1)
+            {
+                delta = MatchHistory.SkirmishMatch;
+                intervalKey = "Skirmish";
+                intervalDesc = "Skirmish";
+            }
+            else if (interval == -2)
+            {
+                delta = MatchHistory.TimezoneMatch;
+                intervalKey = "Timezone";
+                intervalDesc = "Timezone";
+            }
+
+
             var result = new StringBuilder();
 
+            var section = "WVWMapDetails" + intervalKey.ToString();
             var key = (map.Equals("EBG") ? "EBG" : CurrentTeams[map]);
             var mapName = (map.Equals("EBG") ? map : CurrentWorlds[map] + "BL");
 
-            result.Append("Last 10m details for " + mapName + "...");
-            Ini.Write(key + "1", "\"" + result.ToString() + "\"", "WVWMapDetails");
+            result.Append(intervalDesc).Append(" details for " + mapName + "...");
+            Ini.Write(key + "1", "\"" + result.ToString() + "\"", section);
             result.AppendLine();
 
             var mapObjName = (map.Equals("EBG") ? "Center" : map + "Home");
@@ -442,26 +527,32 @@ namespace Sandbox
                     .Append(": K=")
                     .Append(kills)
                     .Append(", D=")
-                    .Append(deaths)
-                    .Append(", Flips=");
-                if (objs.Count == 0)
-                    s.Append("None");
-                else
+                    .Append(deaths);
+
+                if (interval > 0 && interval <= 15)
                 {
-                    foreach (var o in objs)
-                        s.Append(Objectives[o.ObjectiveId].GetShortName())
-                            .Append(" (")
-                            .Append(Math.Round(Convert.ToDecimal(o.GetMinutesHeld()), 1))
-                            .Append("m), ");
-                    s.Length -= 2;
+                    s.Append(", Flips=");
+                    if (objs.Count == 0)
+                        s.Append("None");
+                    else
+                    {
+                        foreach (var o in objs)
+                            s.Append(Objectives[o.ObjectiveId].GetShortName())
+                                .Append(" (")
+                                .Append(Math.Round(Convert.ToDecimal(o.GetMinutesHeld()), 1))
+                                .Append("m), ");
+                        s.Length -= 2;
+                    }
                 }
                 result.AppendLine(s.ToString());
 
-                Ini.Write(key + (i++).ToString(), "\"" + s.ToString() + "\"", "WVWMapDetails");
+                Ini.Write(key + (i++).ToString(), "\"" + s.ToString() + "\"", section);
             }
 
             return result.ToString();
         }
+
+        #endregion
 
         #region SQLite Database
         private void writeToDatabase()

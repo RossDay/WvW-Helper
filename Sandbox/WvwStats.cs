@@ -19,6 +19,8 @@ namespace Sandbox
         private readonly Dictionary<string, string> CurrentWorlds = new Dictionary<string, string>();
         public readonly Dictionary<string, Objective> Objectives = new Dictionary<string, Objective>();
 
+        public string APIStatus { get; private set; } = "N/A";
+
         private GW2Bootstrapper GW2 { get; set; }
         private ITeamMapGetter Getter { get; set; }
         private IniFile Ini { get; set; }
@@ -45,8 +47,17 @@ namespace Sandbox
 
         private async Task<Match> GetCurrentMatch()
         {
-            var m = await GW2.V2.WorldVersusWorld.MatchesByWorld.FindAsync(1008);
-            return m;
+            try
+            {
+                var m = await GW2.V2.WorldVersusWorld.MatchesByWorld.FindAsync(1008);
+                APIStatus = "Up";
+                return m;
+            }
+            catch (Exception e)
+            {
+                APIStatus = "Down!\n" + e.Message;
+                return null;
+            }
         }
 
         public DateTime LastUpdateTime
@@ -80,12 +91,21 @@ namespace Sandbox
         private async Task populateObjectives()
         {
             var mapIds = new int[] { 95, 96, 1099, 38 };
-            var repo = GW2.V2.WorldVersusWorld.Objectives.ForDefaultCulture();
-            var allObjs = await repo.FindAllAsync();
-            var objs = allObjs.Where(o => mapIds.Contains(o.Value.MapId));
-            foreach (var kv in objs)
-                if (!Objectives.ContainsKey(kv.Key))
-                    Objectives.Add(kv.Key, kv.Value);
+            try
+            {
+
+                var repo = GW2.V2.WorldVersusWorld.Objectives.ForDefaultCulture();
+                var allObjs = await repo.FindAllAsync();
+                var objs = allObjs.Where(o => mapIds.Contains(o.Value.MapId));
+                foreach (var kv in objs)
+                    if (!Objectives.ContainsKey(kv.Key))
+                        Objectives.Add(kv.Key, kv.Value);
+                APIStatus = "Up";
+            }
+            catch (Exception e)
+            {
+                APIStatus = "Down!\n" + e.Message;
+            }
         }
 
         public async Task Initialize()
@@ -137,6 +157,9 @@ namespace Sandbox
                 return false;
 
             var currentMatch = await GetCurrentMatch();
+            if (currentMatch == null)
+                return false;
+
             var matchAdded = await MatchHistory.maybeAdd(currentMatch);
             if (matchAdded)
             {
@@ -417,6 +440,14 @@ namespace Sandbox
         }
         #endregion
 
+        private String GetObjectiveShortName(string objectiveId)
+        {
+            Objective o;
+            if (Objectives.TryGetValue(objectiveId, out o))
+                return o.GetShortName();
+            return objectiveId;
+        }
+
         #region Writing Tracking
         private static string[] TrackedObjectiveTypes = new string[] { "Castle", "Keep", "Tower", "Camp" };
         private string writeTeamTracking(string team)
@@ -455,7 +486,7 @@ namespace Sandbox
                 else
                 {
                     foreach (var o in objs)
-                        s.Append(Objectives[o.ObjectiveId].GetShortName())
+                        s.Append(GetObjectiveShortName(o.ObjectiveId))
                             .Append(" (")
                             .Append(Math.Round(Convert.ToDecimal(o.GetMinutesHeld()), 1))
                             .Append("m), ");
@@ -554,7 +585,7 @@ namespace Sandbox
                     else
                     {
                         foreach (var o in objs)
-                            s.Append(Objectives[o.ObjectiveId].GetShortName())
+                            s.Append(GetObjectiveShortName(o.ObjectiveId))
                                 .Append(" (")
                                 .Append(Math.Round(Convert.ToDecimal(o.GetMinutesHeld()), 1))
                                 .Append("m), ");

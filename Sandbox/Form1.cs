@@ -150,7 +150,8 @@ namespace Sandbox
         {
             trackingLabel.Text = "Last Update: " + Manager.WvwStats.LastUpdateTime.ToString("yyyyMMdd HH:mm:ss") + "\n" 
                 + "Skirmish Started: " + Manager.WvwStats.SkirmishTime.ToString("yyyyMMdd HH:mm:ss") + "\n"
-                + "Timezone Started: " + Manager.WvwStats.TimezoneTime.ToString("yyyyMMdd HH:mm:ss") + "\n\n" 
+                + "Timezone Started: " + Manager.WvwStats.TimezoneTime.ToString("yyyyMMdd HH:mm:ss") + "\n" 
+                + "API Status: " + Manager.WvwStats.APIStatus + "\n\n"
                 + Manager.WvwStats.LeftTracking + "\n\n" 
                 + Manager.WvwStats.RightTracking + "\n\n" 
                 + Manager.WvwStats.CurrentMapDetails;

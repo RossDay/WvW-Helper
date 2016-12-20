@@ -164,12 +164,9 @@ namespace Sandbox
                     writeOurDeltaRatioMessages(i);
                     foreach (var m in MapList)
                     {
-                        if (m == null)
-                            continue;
-
                         var details = writeMapDetailStats(m, i);
 
-                        if (m.Equals(Getter.Map))
+                        if (m != null && m.Equals(Getter.Map) && i == 10)
                             CurrentMapDetails = details;
                     }
                 }
@@ -179,6 +176,7 @@ namespace Sandbox
             });
         }
 
+        #region Writing OurStats
         private void writeKillDeathStats(int interval)
         {
             var currentMatch = MatchHistory.GetHistoryMatch(0);
@@ -237,7 +235,8 @@ namespace Sandbox
 
                 Ini.Write(key + "Stats" + intervalKey, "\"" + msg + "\"", "OurStats");
             }
-        }
+        } 
+        #endregion
 
         #region Writing Ratios
         private void writeRatioMessages(int interval)
@@ -471,7 +470,7 @@ namespace Sandbox
         }
         #endregion
 
-        #region writeMapDetailStats
+        #region Writing MapDetails
         private string writeMapDetailStats(string map, int interval)
         {
             var match = MatchHistory.GetHistoryMatch(0);
@@ -501,24 +500,40 @@ namespace Sandbox
             var result = new StringBuilder();
 
             var section = "WVWMapDetails" + intervalKey.ToString();
-            var key = (map.Equals("EBG") ? "EBG" : CurrentTeams[map]);
-            var mapName = (map.Equals("EBG") ? map : CurrentWorlds[map] + "BL");
+            String key, mapName, mapObjName;
+            if (String.IsNullOrEmpty(map))
+            {
+                key = "Total";
+                mapName = "All Maps";
+                mapObjName = null;
+            }
+            else if (map.Equals("EBG"))
+            {
+                key = "EBG";
+                mapName = "EBG";
+                mapObjName = "Center";
+            }
+            else
+            {
+                key = CurrentTeams[map];
+                mapName = CurrentWorlds[map] + "BL";
+                mapObjName = map + "Home";
+            }
 
             result.Append(intervalDesc).Append(" details for " + mapName + "...");
             Ini.Write(key + "1", "\"" + result.ToString() + "\"", section);
             result.AppendLine();
 
-            var mapObjName = (map.Equals("EBG") ? "Center" : map + "Home");
-            var allObjs = match.Maps.First(m => m.Type.Equals(mapObjName))
-                .Objectives.Where(o => TrackedObjectiveTypes.Contains(o.Type) && o.GetMinutesHeld() < 15)
-                .OrderByDescending(o => Convert.ToDateTime(o.LastFlipped))
-                .ToList();
+            List<MatchObjective> allObjectives = null;
+            if (mapObjName != null && interval > 0 && interval <= 15)
+                allObjectives = match.Maps.First(m => m.Type.Equals(mapObjName))
+                    .Objectives.Where(o => TrackedObjectiveTypes.Contains(o.Type) && o.GetMinutesHeld() < 15)
+                    .OrderByDescending(o => Convert.ToDateTime(o.LastFlipped))
+                    .ToList();
 
             var i = 2;
             foreach (var team in TeamList)
             {
-                var objs = allObjs.Where(o => o.Owner.ToString().Equals(team)).Take(3).ToList();
-
                 var kills = match.GetDeltaKillsFor(delta, team, map);
                 var deaths = match.GetDeltaDeathsFor(delta, team, map);
 
@@ -529,8 +544,10 @@ namespace Sandbox
                     .Append(", D=")
                     .Append(deaths);
 
-                if (interval > 0 && interval <= 15)
+                if (allObjectives != null)
                 {
+                    var objs = allObjectives.Where(o => o.Owner.ToString().Equals(team)).Take(3).ToList();
+
                     s.Append(", Flips=");
                     if (objs.Count == 0)
                         s.Append("None");
@@ -543,6 +560,11 @@ namespace Sandbox
                                 .Append("m), ");
                         s.Length -= 2;
                     }
+                }
+                else
+                {
+                    s.Append(", KDR=")
+                        .Append(match.GetDeltaKDR(delta, team, map));
                 }
                 result.AppendLine(s.ToString());
 

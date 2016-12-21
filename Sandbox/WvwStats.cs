@@ -49,7 +49,7 @@ namespace Sandbox
         {
             try
             {
-                var m = await GW2.V2.WorldVersusWorld.MatchesByWorld.FindAsync(1008);
+                var m = await GW2.V2.WorldVersusWorld.MatchesByWorld.FindAsync(1005);
                 APIStatus = "Up";
                 return m;
             }
@@ -93,7 +93,6 @@ namespace Sandbox
             var mapIds = new int[] { 95, 96, 1099, 38 };
             try
             {
-
                 var repo = GW2.V2.WorldVersusWorld.Objectives.ForDefaultCulture();
                 var allObjs = await repo.FindAllAsync();
                 var objs = allObjs.Where(o => mapIds.Contains(o.Value.MapId));
@@ -186,11 +185,7 @@ namespace Sandbox
             if ((now - lastUpdated).TotalSeconds < 55)
                 return false;
 
-            var currentMatch = await GetCurrentMatch();
-            if (currentMatch == null)
-                return false;
-
-            var matchAdded = await MatchHistory.maybeAdd(currentMatch);
+            var matchAdded = await MatchHistory.maybeUpdate();
             if (matchAdded)
             {
                 lastUpdated = now;

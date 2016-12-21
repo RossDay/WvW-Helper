@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using GW2NET;
+using GW2NET.Worlds;
 using GW2NET.WorldVersusWorld;
 
 namespace Sandbox
@@ -11,6 +13,46 @@ namespace Sandbox
     [DataContract]
     class MatchHistory : IEnumerable<KeyValuePair<DateTime, Match>>
     {
+        public static string APIStatus { get; private set; } = "N/A";
+        private GW2Bootstrapper GW2 { get; set; } = new GW2Bootstrapper();
+
+        public int WorldId { get; private set; } = 1008;
+        private async Task<Match> GetCurrentMatch()
+        {
+            try
+            {
+                var m = await GW2.V2.WorldVersusWorld.MatchesByWorld.FindAsync(WorldId);
+                APIStatus = "Up";
+                return m;
+            }
+            catch (Exception e)
+            {
+                APIStatus = "Down!\n" + e.Message;
+                return null;
+            }
+        }
+
+        private static readonly string[] TeamList = new string[] { "Red", "Green", "Blue" };
+
+        [DataMember]
+        private readonly Dictionary<string, string> CurrentTeams = new Dictionary<string, string>();
+        [DataMember]
+        private readonly Dictionary<string, string> CurrentWorlds = new Dictionary<string, string>();
+
+        private ITeamMapGetter Getter { get; set; }
+        public string OurTeam { get { return Getter.Team; } }
+
+        [DataMember]
+        public string LeftTeam { get; private set; }
+        [DataMember]
+        public string RightTeam { get; private set; }
+        [DataMember]
+        public string OurWorld { get; private set; }
+        [DataMember]
+        public string LeftWorld { get; private set; }
+        [DataMember]
+        public string RightWorld { get; private set; }
+
         [DataMember]
         private LinkedList<KeyValuePair<DateTime, Match>> Matches { get; set; }
         [DataMember]
@@ -56,7 +98,30 @@ namespace Sandbox
                 return delta.Value.Value;
         }
 
-        public async Task<bool> maybeAdd(Match match)
+        public async Task<bool> maybeUpdate()
+        {
+            var match = await GetCurrentMatch();
+            if (match == null)
+                return false;
+
+            Task t = null;
+            var needToSerialize = false;
+            if (OurWorld == null || match.Scores.Red < Matches.First.Value.Value.Scores.Red)
+            {
+                needToSerialize = true;
+                t = maybeUpdateTeam(match);
+            }
+
+            needToSerialize = needToSerialize || (await maybeAdd(match));
+            if (needToSerialize)
+                await Task.Run(() => Serialize());
+
+            if (t != null)
+                await t;
+            return needToSerialize;
+        }
+
+        private async Task<bool> maybeAdd(Match match)
         {
             var now = DateTime.Now;
             var b = await Task.Run(() =>
@@ -82,11 +147,39 @@ namespace Sandbox
                     Matches.AddFirst(new KeyValuePair<DateTime, Match>(now, match));
                     needToSerialize = true;
                 }
-                if (needToSerialize)
-                    Serialize();
                 return needToSerialize;
             });
             return b;
+        }
+
+        private async Task maybeUpdateTeam(Match currentMatch = null)
+        {
+            if (currentMatch == null)
+                currentMatch = await GetCurrentMatch();
+            var matchWorlds = currentMatch.Worlds;
+
+            var worldRepo = GW2.V2.Worlds.ForDefaultCulture();
+            var worlds = new World[] {
+                await worldRepo.FindAsync(matchWorlds.Red),
+                await worldRepo.FindAsync(matchWorlds.Green),
+                await worldRepo.FindAsync(matchWorlds.Blue)
+            };
+
+            CurrentWorlds["Red"] = worlds[0].AbbreviatedName;
+            CurrentWorlds["Green"] = worlds[1].AbbreviatedName;
+            CurrentWorlds["Blue"] = worlds[2].AbbreviatedName;
+
+            var index = Array.IndexOf(TeamList, OurTeam);
+
+            OurWorld = worlds[index].AbbreviatedName;
+            LeftTeam = TeamList[(index - 1 + TeamList.Length) % TeamList.Length];
+            RightTeam = TeamList[(index + 1) % TeamList.Length];
+            LeftWorld = worlds[(index - 1 + TeamList.Length) % TeamList.Length].AbbreviatedName;
+            RightWorld = worlds[(index + 1) % TeamList.Length].AbbreviatedName;
+
+            CurrentTeams[OurTeam] = "Our";
+            CurrentTeams[LeftTeam] = "Left";
+            CurrentTeams[RightTeam] = "Right";
         }
 
         public void clear()

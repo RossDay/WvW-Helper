@@ -32,6 +32,7 @@ namespace Sandbox
             });
 
             await Manager.Initialize();
+
             await t;
             t = null;
 

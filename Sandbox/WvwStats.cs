@@ -82,10 +82,10 @@ namespace Sandbox
             maybeCreateDatabase();
         }
 
-        public async void reset()
+        public async Task reset()
         {
             MatchHistory.clear();
-            await Initialize();
+            await UpdateTeam();
         }
 
         private async Task populateObjectives()
@@ -108,13 +108,40 @@ namespace Sandbox
             }
         }
 
+        private string iniRead(string key, string defaultValue = "", bool setIfMissing = false)
+        {
+            if (Ini.KeyExists(key, "GW2"))
+                return Ini.Read(key, "GW2");
+            if (setIfMissing)
+                Ini.Write(key, defaultValue, "GW2");
+            return defaultValue;
+        }
+
         public async Task Initialize()
         {
-            var objTask = populateObjectives();
+            var t = MatchHistory.CreateAsync();
 
-            MatchHistory = await MatchHistory.CreateAsync();
+            CurrentWorlds["Red"] = iniRead("RedWorld", "Red");
+            CurrentWorlds["Green"] = iniRead("GreenWorld", "Green");
+            CurrentWorlds["Blue"] = iniRead("BlueWorld", "Blue");
 
-            var currentMatch = await GetCurrentMatch();
+            OurWorld = iniRead("OurWorld", "Our");
+            LeftTeam = iniRead("LeftTeam", "Left");
+            LeftWorld = iniRead("LeftWorld", "Left");
+            RightTeam = iniRead("RightTeam", "Right");
+            RightWorld = iniRead("RightWorld", "Right");
+
+            CurrentTeams[OurTeam] = "Our";
+            CurrentTeams[LeftTeam] = "Left";
+            CurrentTeams[RightTeam] = "Right";
+
+            MatchHistory = await t;
+        }
+
+        private async Task UpdateTeam(Match currentMatch = null)
+        {
+            if (currentMatch == null)
+                currentMatch = await GetCurrentMatch();
             var matchWorlds = currentMatch.Worlds;
 
             var worldRepo = GW2.V2.Worlds.ForDefaultCulture();
@@ -135,16 +162,19 @@ namespace Sandbox
             RightTeam = TeamList[(index + 1) % TeamList.Length];
             LeftWorld = worlds[(index - 1 + TeamList.Length) % TeamList.Length].AbbreviatedName;
             RightWorld = worlds[(index + 1) % TeamList.Length].AbbreviatedName;
-            Ini.Write("LeftTeam", LeftTeam, "GW2");
-            Ini.Write("RightTeam", RightTeam, "GW2");
-            Ini.Write("LeftWorld", LeftWorld, "GW2");
-            Ini.Write("RightWorld", RightWorld, "GW2");
 
             CurrentTeams[OurTeam] = "Our";
             CurrentTeams[LeftTeam] = "Left";
             CurrentTeams[RightTeam] = "Right";
 
-            await objTask;
+            Ini.Write("OurWorld", OurWorld, "GW2");
+            Ini.Write("LeftTeam", LeftTeam, "GW2");
+            Ini.Write("RightTeam", RightTeam, "GW2");
+            Ini.Write("LeftWorld", LeftWorld, "GW2");
+            Ini.Write("RightWorld", RightWorld, "GW2");
+            Ini.Write("RedWorld", CurrentWorlds["Red"], "GW2");
+            Ini.Write("GreenWorld", CurrentWorlds["Green"], "GW2");
+            Ini.Write("BlueWorld", CurrentWorlds["Blue"], "GW2");
         } 
         #endregion
 
@@ -178,6 +208,11 @@ namespace Sandbox
 
         private async Task writeStats()
         {
+            if (OurWorld.Equals("Our"))
+                await UpdateTeam();
+            if (Objectives.Count == 0)
+                await populateObjectives();
+
             await Task.Run(() =>
             {
                 foreach (var i in Intervals)

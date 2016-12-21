@@ -91,14 +91,14 @@ namespace Sandbox
 
         public async Task<bool> maybeUpdateMumble()
         {
-            var b = await Task.Run(() =>
+            var b = await Task.Run(async () =>
             {
                 var a = Mumble.Read();
                 if (a == null || a.Context == null || a.Identity == null)
                     return false;
 
                 bool result = maybeUpdateMap(a.Context.MapId);
-                return maybeUpdateTeam(a.Identity.TeamColorId) && result;
+                return result || (await maybeUpdateTeam(a.Identity.TeamColorId));
             });
             return b;
         }
@@ -129,7 +129,7 @@ namespace Sandbox
             Links.updateMapBasedLinks();
         }
 
-        private bool maybeUpdateTeam(int newColorId)
+        private async Task<bool> maybeUpdateTeam(int newColorId)
         {
             CurrentTeamColorId = newColorId;
             if (TeamColorId.Equals(newColorId))
@@ -142,7 +142,7 @@ namespace Sandbox
             TeamColorId = newColorId;
             Team = teamColor;
 
-            WvwStats.reset();
+            await WvwStats.reset();
             Links.updateTeamBasedLinks();
 
             return true;

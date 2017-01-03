@@ -253,6 +253,15 @@ namespace Sandbox
             redWorldLabel.Text = Manager.WvwStats.GetWorldByTeam("Red") + "BL\nRed";
             greenWorldLabel.Text = Manager.WvwStats.GetWorldByTeam("Green") + "BL\nGreen";
             blueWorldLabel.Text = Manager.WvwStats.GetWorldByTeam("Blue") + "BL\nBlue";
+
+            var tier1 = Manager.WvwStats.GetMatchupFor("1-1");
+            statsTableTier1.updateStatsTableTeamsAndMaps(tier1);
+
+            var tier2 = Manager.WvwStats.GetMatchupFor("1-2");
+            statsTableTier2.updateStatsTableTeamsAndMaps(tier2);
+
+            var tier3 = Manager.WvwStats.GetMatchupFor("1-3");
+            statsTableTier3.updateStatsTableTeamsAndMaps(tier3);
         }
 
         private static readonly string[] maps = new string[] { null, null, "Red", "Red", "Red", null,"Green", "Green", "Green", null, "Blue", "Blue", "Blue", null, "EBG", "EBG", "EBG" };
@@ -285,6 +294,27 @@ namespace Sandbox
                                 l.Refresh();
                             }), r*100+c);
                         }
+
+            var tier1 = Manager.WvwStats.GetMatchupFor("1-1");
+            var tier1match = tier1.GetHistoryMatch(0);
+            var tier1delta5 = tier1.GetHistoryMatch(5);
+            var tier1delta10 = tier1.GetHistoryMatch(10);
+            var tier1delta15 = tier1.GetHistoryMatch(15);
+            statsTableTier1.updateStatsTable(tier1match, tier1delta5, tier1delta10, tier1delta15);
+
+            var tier2 = Manager.WvwStats.GetMatchupFor("1-2");
+            var tier2match = tier2.GetHistoryMatch(0);
+            var tier2delta5 = tier2.GetHistoryMatch(5);
+            var tier2delta10 = tier2.GetHistoryMatch(10);
+            var tier2delta15 = tier2.GetHistoryMatch(15);
+            statsTableTier2.updateStatsTable(tier2match, tier2delta5, tier2delta10, tier2delta15);
+
+            var tier3 = Manager.WvwStats.GetMatchupFor("1-3");
+            var tier3match = tier3.GetHistoryMatch(0);
+            var tier3delta5 = tier3.GetHistoryMatch(5);
+            var tier3delta10 = tier3.GetHistoryMatch(10);
+            var tier3delta15 = tier3.GetHistoryMatch(15);
+            statsTableTier3.updateStatsTable(tier3match, tier3delta5, tier3delta10, tier3delta15);
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -43,6 +43,11 @@ namespace Sandbox
             return CurrentHistory.GetHistoryMatch(interval);
         }
 
+        public MatchHistory GetMatchupFor(string matchupId)
+        {
+            return CurrentHistory.GetMatchupFor(matchupId);
+        }
+
         public DateTime LastUpdateTime { get { return CurrentHistory.LastUpdateTime; } }
         public DateTime SkirmishTime { get { return CurrentHistory.SkirmishTime; } }
         public DateTime TimezoneTime { get { return CurrentHistory.TimezoneTime; } }

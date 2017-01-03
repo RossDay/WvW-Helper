@@ -62,13 +62,16 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.splitContainer7 = new System.Windows.Forms.SplitContainer();
             this.trackingLabel = new System.Windows.Forms.Label();
+            this.trackingLabel2 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.statsTable = new System.Windows.Forms.TableLayoutPanel();
             this.redWorldLabel = new System.Windows.Forms.Label();
-            this.redTeamLabel = new System.Windows.Forms.Label();
             this.ebgWorldLabel = new System.Windows.Forms.Label();
+            this.redTeamLabel = new System.Windows.Forms.Label();
             this.blueWorldLabel = new System.Windows.Forms.Label();
             this.greenWorldLabel = new System.Windows.Forms.Label();
             this.timerLabel = new System.Windows.Forms.Label();
@@ -80,9 +83,12 @@
             this.redTeamLabel3 = new System.Windows.Forms.Label();
             this.greenTeamLabel3 = new System.Windows.Forms.Label();
             this.blueTeamLabel3 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.splitContainer7 = new System.Windows.Forms.SplitContainer();
-            this.trackingLabel2 = new System.Windows.Forms.Label();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.statsTableTier1 = new Sandbox.StatsTableControl();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.statsTableTier2 = new Sandbox.StatsTableControl();
+            this.statsTableTier3 = new Sandbox.StatsTableControl();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).BeginInit();
             this.splitContainer5.Panel1.SuspendLayout();
@@ -113,12 +119,15 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.tabPage4.SuspendLayout();
-            this.statsTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer7)).BeginInit();
             this.splitContainer7.Panel1.SuspendLayout();
             this.splitContainer7.Panel2.SuspendLayout();
             this.splitContainer7.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.statsTable.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.tabPage6.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -477,6 +486,9 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(1);
             this.tabControl1.Name = "tabControl1";
@@ -500,6 +512,19 @@
             this.tabPage1.Text = "Setup";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "1-1",
+            "1-2",
+            "1-3"});
+            this.comboBox1.Location = new System.Drawing.Point(369, 272);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(108, 21);
+            this.comboBox1.TabIndex = 20;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.splitContainer7);
@@ -511,6 +536,24 @@
             this.tabPage3.Text = "Tracking";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // splitContainer7
+            // 
+            this.splitContainer7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer7.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer7.Margin = new System.Windows.Forms.Padding(0);
+            this.splitContainer7.Name = "splitContainer7";
+            // 
+            // splitContainer7.Panel1
+            // 
+            this.splitContainer7.Panel1.Controls.Add(this.trackingLabel);
+            // 
+            // splitContainer7.Panel2
+            // 
+            this.splitContainer7.Panel2.Controls.Add(this.trackingLabel2);
+            this.splitContainer7.Size = new System.Drawing.Size(491, 367);
+            this.splitContainer7.SplitterDistance = 283;
+            this.splitContainer7.TabIndex = 2;
+            // 
             // trackingLabel
             // 
             this.trackingLabel.AutoSize = true;
@@ -521,6 +564,17 @@
             this.trackingLabel.Size = new System.Drawing.Size(35, 13);
             this.trackingLabel.TabIndex = 1;
             this.trackingLabel.Text = "label7";
+            // 
+            // trackingLabel2
+            // 
+            this.trackingLabel2.AutoSize = true;
+            this.trackingLabel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackingLabel2.Location = new System.Drawing.Point(0, 0);
+            this.trackingLabel2.Margin = new System.Windows.Forms.Padding(0);
+            this.trackingLabel2.Name = "trackingLabel2";
+            this.trackingLabel2.Size = new System.Drawing.Size(35, 13);
+            this.trackingLabel2.TabIndex = 2;
+            this.trackingLabel2.Text = "label7";
             // 
             // tabPage4
             // 
@@ -548,7 +602,7 @@
             this.statsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
             this.statsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
             this.statsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
-            this.statsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
+            this.statsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 61F));
             this.statsTable.Controls.Add(this.redWorldLabel, 0, 2);
             this.statsTable.Controls.Add(this.ebgWorldLabel, 0, 14);
             this.statsTable.Controls.Add(this.redTeamLabel, 2, 0);
@@ -603,19 +657,6 @@
             this.redWorldLabel.Text = "RedBL";
             this.redWorldLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // redTeamLabel
-            // 
-            this.redTeamLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.redTeamLabel.AutoSize = true;
-            this.redTeamLabel.Location = new System.Drawing.Point(45, 0);
-            this.redTeamLabel.Name = "redTeamLabel";
-            this.redTeamLabel.Size = new System.Drawing.Size(42, 54);
-            this.redTeamLabel.TabIndex = 4;
-            this.redTeamLabel.Text = "Red Team";
-            this.redTeamLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // ebgWorldLabel
             // 
             this.ebgWorldLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -630,6 +671,19 @@
             this.ebgWorldLabel.TabIndex = 3;
             this.ebgWorldLabel.Text = "EBG";
             this.ebgWorldLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // redTeamLabel
+            // 
+            this.redTeamLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.redTeamLabel.AutoSize = true;
+            this.redTeamLabel.Location = new System.Drawing.Point(45, 0);
+            this.redTeamLabel.Name = "redTeamLabel";
+            this.redTeamLabel.Size = new System.Drawing.Size(42, 54);
+            this.redTeamLabel.TabIndex = 4;
+            this.redTeamLabel.Text = "Red Team";
+            this.redTeamLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // blueWorldLabel
             // 
@@ -780,47 +834,60 @@
             this.blueTeamLabel3.Text = "Blue Team";
             this.blueTeamLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // comboBox1
+            // tabPage2
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "1-1",
-            "1-2",
-            "1-3"});
-            this.comboBox1.Location = new System.Drawing.Point(369, 272);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(108, 21);
-            this.comboBox1.TabIndex = 20;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.tabPage2.Controls.Add(this.statsTableTier1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(497, 373);
+            this.tabPage2.TabIndex = 4;
+            this.tabPage2.Text = "Tier 1";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // splitContainer7
+            // statsTableTier1
             // 
-            this.splitContainer7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer7.Location = new System.Drawing.Point(3, 3);
-            this.splitContainer7.Margin = new System.Windows.Forms.Padding(0);
-            this.splitContainer7.Name = "splitContainer7";
+            this.statsTableTier1.Location = new System.Drawing.Point(0, 0);
+            this.statsTableTier1.Margin = new System.Windows.Forms.Padding(0);
+            this.statsTableTier1.Name = "statsTableTier1";
+            this.statsTableTier1.Size = new System.Drawing.Size(491, 367);
+            this.statsTableTier1.TabIndex = 0;
             // 
-            // splitContainer7.Panel1
+            // tabPage5
             // 
-            this.splitContainer7.Panel1.Controls.Add(this.trackingLabel);
+            this.tabPage5.Controls.Add(this.statsTableTier2);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Size = new System.Drawing.Size(497, 373);
+            this.tabPage5.TabIndex = 5;
+            this.tabPage5.Text = "Tier 2";
+            this.tabPage5.UseVisualStyleBackColor = true;
             // 
-            // splitContainer7.Panel2
+            // tabPage6
             // 
-            this.splitContainer7.Panel2.Controls.Add(this.trackingLabel2);
-            this.splitContainer7.Size = new System.Drawing.Size(491, 367);
-            this.splitContainer7.SplitterDistance = 283;
-            this.splitContainer7.TabIndex = 2;
+            this.tabPage6.Controls.Add(this.statsTableTier3);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(497, 373);
+            this.tabPage6.TabIndex = 6;
+            this.tabPage6.Text = "Tier 3";
+            this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // trackingLabel2
+            // statsTableTier2
             // 
-            this.trackingLabel2.AutoSize = true;
-            this.trackingLabel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trackingLabel2.Location = new System.Drawing.Point(0, 0);
-            this.trackingLabel2.Margin = new System.Windows.Forms.Padding(0);
-            this.trackingLabel2.Name = "trackingLabel2";
-            this.trackingLabel2.Size = new System.Drawing.Size(35, 13);
-            this.trackingLabel2.TabIndex = 2;
-            this.trackingLabel2.Text = "label7";
+            this.statsTableTier2.Location = new System.Drawing.Point(0, 0);
+            this.statsTableTier2.Margin = new System.Windows.Forms.Padding(0);
+            this.statsTableTier2.Name = "statsTableTier2";
+            this.statsTableTier2.Size = new System.Drawing.Size(491, 367);
+            this.statsTableTier2.TabIndex = 1;
+            // 
+            // statsTableTier3
+            // 
+            this.statsTableTier3.Location = new System.Drawing.Point(0, 0);
+            this.statsTableTier3.Margin = new System.Windows.Forms.Padding(0);
+            this.statsTableTier3.Name = "statsTableTier3";
+            this.statsTableTier3.Size = new System.Drawing.Size(491, 367);
+            this.statsTableTier3.TabIndex = 1;
             // 
             // Form1
             // 
@@ -875,15 +942,18 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
-            this.tabPage4.ResumeLayout(false);
-            this.statsTable.ResumeLayout(false);
-            this.statsTable.PerformLayout();
             this.splitContainer7.Panel1.ResumeLayout(false);
             this.splitContainer7.Panel1.PerformLayout();
             this.splitContainer7.Panel2.ResumeLayout(false);
             this.splitContainer7.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer7)).EndInit();
             this.splitContainer7.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.statsTable.ResumeLayout(false);
+            this.statsTable.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage6.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -943,6 +1013,12 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.SplitContainer splitContainer7;
         private System.Windows.Forms.Label trackingLabel2;
+        private System.Windows.Forms.TabPage tabPage2;
+        private StatsTableControl statsTableTier1;
+        private System.Windows.Forms.TabPage tabPage5;
+        private StatsTableControl statsTableTier2;
+        private System.Windows.Forms.TabPage tabPage6;
+        private StatsTableControl statsTableTier3;
     }
 }
 

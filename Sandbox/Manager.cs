@@ -142,7 +142,6 @@ namespace Sandbox
             TeamColorId = newColorId;
             Team = teamColor;
 
-            await WvwStats.reset();
             Links.updateTeamBasedLinks();
 
             return true;

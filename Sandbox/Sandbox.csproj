@@ -123,6 +123,7 @@
     <Compile Include="ITeamMapGetter.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="MapLinks.cs" />
+    <Compile Include="MatchHistoryCollection.cs" />
     <Compile Include="MatchHistory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

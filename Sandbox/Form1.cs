@@ -156,6 +156,8 @@ namespace Sandbox
                 + Manager.WvwStats.LeftTracking + "\n\n" 
                 + Manager.WvwStats.RightTracking + "\n\n" 
                 + Manager.WvwStats.CurrentMapDetails;
+
+            trackingLabel2.Text = Manager.WvwStats.TierTracking;
         }
 
         private void squadUpdateButton_Click(object sender, EventArgs e)
@@ -287,6 +289,17 @@ namespace Sandbox
 
         private void button1_Click(object sender, EventArgs e)
         {
+        }
+
+        private async void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var matchupId = comboBox1.SelectedItem.ToString();
+
+            await Manager.WvwStats.setMatchup(matchupId);
+
+            updateStatsTableTeamsAndMaps();
+            updateStatsTable();
+            updateTrackingTab();
         }
     }
 }

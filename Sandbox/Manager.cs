@@ -98,7 +98,7 @@ namespace Sandbox
                     return false;
 
                 bool result = maybeUpdateMap(a.Context.MapId);
-                return result || (await maybeUpdateTeam(a.Identity.TeamColorId));
+                return result || maybeUpdateTeam(a.Identity.TeamColorId);
             });
             return b;
         }
@@ -129,7 +129,7 @@ namespace Sandbox
             Links.updateMapBasedLinks();
         }
 
-        private async Task<bool> maybeUpdateTeam(int newColorId)
+        private bool maybeUpdateTeam(int newColorId)
         {
             CurrentTeamColorId = newColorId;
             if (TeamColorId.Equals(newColorId))

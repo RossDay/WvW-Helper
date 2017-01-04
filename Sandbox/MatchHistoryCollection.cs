@@ -77,6 +77,7 @@ namespace Sandbox
             return CurrentHistory.GetWorldByTeam(team);
         }
 
+        private Task SerializerTask = null;
         public async Task<bool> maybeUpdate()
         {
             var needToSerialize = false;
@@ -98,8 +99,21 @@ namespace Sandbox
                 needToSerialize = needToSerialize || temp;
             }
 
+            if (SerializerTask != null && SerializerTask.IsCompleted)
+            {
+                SerializerTask.Dispose();
+                SerializerTask = null;
+            }
+
             if (needToSerialize)
-                await Task.Run(() => Serialize());
+            {
+                if (SerializerTask != null)
+                {
+                    SerializerTask.Wait();
+                    SerializerTask.Dispose();
+                }
+                SerializerTask = Task.Run(() => Serialize());
+            }
 
             return isCurrentUpdated;
         }

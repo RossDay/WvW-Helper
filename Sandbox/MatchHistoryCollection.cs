@@ -93,24 +93,28 @@ namespace Sandbox
                 if (match == null)
                     continue;
 
+                if (SerializerTask != null)
+                {
+                    if (!SerializerTask.IsCompleted)
+                        SerializerTask.Wait();
+                    SerializerTask.Dispose();
+                    SerializerTask = null;
+                }
+
                 var temp = await kv.Value.maybeUpdate(match);
                 if (kv.Key.Equals(CurrentMatchup))
                     isCurrentUpdated = temp;
                 needToSerialize = needToSerialize || temp;
             }
 
-            if (SerializerTask != null && SerializerTask.IsCompleted)
-            {
-                SerializerTask.Dispose();
-                SerializerTask = null;
-            }
-
             if (needToSerialize)
             {
                 if (SerializerTask != null)
                 {
-                    SerializerTask.Wait();
+                    if (!SerializerTask.IsCompleted)
+                        SerializerTask.Wait();
                     SerializerTask.Dispose();
+                    SerializerTask = null;
                 }
                 SerializerTask = Task.Run(() => Serialize());
             }

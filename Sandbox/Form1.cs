@@ -109,10 +109,8 @@ namespace Sandbox
         private async void mumbleTimer_Tick(object sender, EventArgs e)
         {
             var statsUpdateTask = Manager.maybeUpdateStats();
-            var mumbleUpdateTask = Manager.maybeUpdateMumble();
 
-            var mumbleUpdated = await mumbleUpdateTask;
-            if (mumbleUpdated)
+            if (Manager.maybeUpdateMumble())
             {
                 mumbleTimer.Stop();
                 Manager.resetMumble();

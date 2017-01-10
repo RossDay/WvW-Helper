@@ -89,18 +89,14 @@ namespace Sandbox
             return b;
         }
 
-        public async Task<bool> maybeUpdateMumble()
+        public bool maybeUpdateMumble()
         {
-            var b = await Task.Run(async () =>
-            {
-                var a = Mumble.Read();
-                if (a == null || a.Context == null || a.Identity == null)
-                    return false;
+            var a = Mumble.Read();
+            if (a == null || a.Context == null || a.Identity == null)
+                return false;
 
-                bool result = maybeUpdateMap(a.Context.MapId);
-                return result || maybeUpdateTeam(a.Identity.TeamColorId);
-            });
-            return b;
+            bool result = maybeUpdateMap(a.Context.MapId);
+            return result || maybeUpdateTeam(a.Identity.TeamColorId);
         }
 
         private bool maybeUpdateMap(int newMapId)

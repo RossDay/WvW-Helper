@@ -13,9 +13,6 @@ namespace Sandbox
     [DataContract]
     class MatchHistory : IEnumerable<KeyValuePair<DateTime, Match>>
     {
-        public static string APIStatus { get; private set; } = "N/A";
-        private GW2Bootstrapper GW2 { get; set; } = new GW2Bootstrapper();
-
         private static readonly string[] TeamList = new string[] { "Red", "Green", "Blue" };
 
         public MatchHistory(ITeamMapGetter getter, String matchupId)
@@ -169,7 +166,7 @@ namespace Sandbox
         {
             var matchWorlds = currentMatch.Worlds;
 
-            var worldRepo = GW2.V2.Worlds.ForDefaultCulture();
+            var worldRepo = (new GW2Bootstrapper()).V2.Worlds.ForDefaultCulture();
             var worlds = new World[] {
                 await worldRepo.FindAsync(matchWorlds.Red),
                 await worldRepo.FindAsync(matchWorlds.Green),

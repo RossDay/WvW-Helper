@@ -49,7 +49,7 @@
             // statsTable
             // 
             this.statsTable.ColumnCount = 13;
-            this.statsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.statsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 53F));
             this.statsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
             this.statsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
             this.statsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
@@ -111,7 +111,7 @@
             this.redWorldLabel.Margin = new System.Windows.Forms.Padding(0);
             this.redWorldLabel.Name = "redWorldLabel";
             this.statsTable.SetRowSpan(this.redWorldLabel, 3);
-            this.redWorldLabel.Size = new System.Drawing.Size(40, 75);
+            this.redWorldLabel.Size = new System.Drawing.Size(53, 75);
             this.redWorldLabel.TabIndex = 0;
             this.redWorldLabel.Text = "RedBL";
             this.redWorldLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -126,7 +126,7 @@
             this.ebgWorldLabel.Margin = new System.Windows.Forms.Padding(0);
             this.ebgWorldLabel.Name = "ebgWorldLabel";
             this.statsTable.SetRowSpan(this.ebgWorldLabel, 3);
-            this.ebgWorldLabel.Size = new System.Drawing.Size(40, 80);
+            this.ebgWorldLabel.Size = new System.Drawing.Size(53, 80);
             this.ebgWorldLabel.TabIndex = 3;
             this.ebgWorldLabel.Text = "EBG";
             this.ebgWorldLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -137,7 +137,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.redTeamLabel.AutoSize = true;
-            this.redTeamLabel.Location = new System.Drawing.Point(45, 0);
+            this.redTeamLabel.Location = new System.Drawing.Point(58, 0);
             this.redTeamLabel.Name = "redTeamLabel";
             this.redTeamLabel.Size = new System.Drawing.Size(42, 54);
             this.redTeamLabel.TabIndex = 4;
@@ -154,7 +154,7 @@
             this.blueWorldLabel.Margin = new System.Windows.Forms.Padding(0);
             this.blueWorldLabel.Name = "blueWorldLabel";
             this.statsTable.SetRowSpan(this.blueWorldLabel, 3);
-            this.blueWorldLabel.Size = new System.Drawing.Size(40, 75);
+            this.blueWorldLabel.Size = new System.Drawing.Size(53, 75);
             this.blueWorldLabel.TabIndex = 2;
             this.blueWorldLabel.Text = "BlueBL";
             this.blueWorldLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -169,7 +169,7 @@
             this.greenWorldLabel.Margin = new System.Windows.Forms.Padding(0);
             this.greenWorldLabel.Name = "greenWorldLabel";
             this.statsTable.SetRowSpan(this.greenWorldLabel, 3);
-            this.greenWorldLabel.Size = new System.Drawing.Size(40, 75);
+            this.greenWorldLabel.Size = new System.Drawing.Size(53, 75);
             this.greenWorldLabel.TabIndex = 1;
             this.greenWorldLabel.Text = "GreenBL";
             this.greenWorldLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -184,7 +184,7 @@
             this.timerLabel.Location = new System.Drawing.Point(0, 0);
             this.timerLabel.Margin = new System.Windows.Forms.Padding(0);
             this.timerLabel.Name = "timerLabel";
-            this.timerLabel.Size = new System.Drawing.Size(40, 54);
+            this.timerLabel.Size = new System.Drawing.Size(53, 54);
             this.timerLabel.TabIndex = 7;
             this.timerLabel.Text = "60";
             this.timerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -195,7 +195,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.greenTeamLabel2.AutoSize = true;
-            this.greenTeamLabel2.Location = new System.Drawing.Point(239, 0);
+            this.greenTeamLabel2.Location = new System.Drawing.Point(252, 0);
             this.greenTeamLabel2.Name = "greenTeamLabel2";
             this.greenTeamLabel2.Size = new System.Drawing.Size(42, 54);
             this.greenTeamLabel2.TabIndex = 9;
@@ -208,7 +208,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.blueTeamLabel2.AutoSize = true;
-            this.blueTeamLabel2.Location = new System.Drawing.Point(287, 0);
+            this.blueTeamLabel2.Location = new System.Drawing.Point(300, 0);
             this.blueTeamLabel2.Name = "blueTeamLabel2";
             this.blueTeamLabel2.Size = new System.Drawing.Size(42, 54);
             this.blueTeamLabel2.TabIndex = 10;
@@ -221,7 +221,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.redTeamLabel2.AutoSize = true;
-            this.redTeamLabel2.Location = new System.Drawing.Point(191, 0);
+            this.redTeamLabel2.Location = new System.Drawing.Point(204, 0);
             this.redTeamLabel2.Name = "redTeamLabel2";
             this.redTeamLabel2.Size = new System.Drawing.Size(42, 54);
             this.redTeamLabel2.TabIndex = 8;
@@ -234,7 +234,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.blueTeamLabel.AutoSize = true;
-            this.blueTeamLabel.Location = new System.Drawing.Point(141, 0);
+            this.blueTeamLabel.Location = new System.Drawing.Point(154, 0);
             this.blueTeamLabel.Name = "blueTeamLabel";
             this.blueTeamLabel.Size = new System.Drawing.Size(42, 54);
             this.blueTeamLabel.TabIndex = 6;
@@ -247,7 +247,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.greenTeamLabel.AutoSize = true;
-            this.greenTeamLabel.Location = new System.Drawing.Point(93, 0);
+            this.greenTeamLabel.Location = new System.Drawing.Point(106, 0);
             this.greenTeamLabel.Name = "greenTeamLabel";
             this.greenTeamLabel.Size = new System.Drawing.Size(42, 54);
             this.greenTeamLabel.TabIndex = 5;
@@ -260,7 +260,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.redTeamLabel3.AutoSize = true;
-            this.redTeamLabel3.Location = new System.Drawing.Point(337, 0);
+            this.redTeamLabel3.Location = new System.Drawing.Point(350, 0);
             this.redTeamLabel3.Name = "redTeamLabel3";
             this.redTeamLabel3.Size = new System.Drawing.Size(42, 54);
             this.redTeamLabel3.TabIndex = 11;
@@ -273,7 +273,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.greenTeamLabel3.AutoSize = true;
-            this.greenTeamLabel3.Location = new System.Drawing.Point(385, 0);
+            this.greenTeamLabel3.Location = new System.Drawing.Point(398, 0);
             this.greenTeamLabel3.Name = "greenTeamLabel3";
             this.greenTeamLabel3.Size = new System.Drawing.Size(42, 54);
             this.greenTeamLabel3.TabIndex = 12;
@@ -286,9 +286,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.blueTeamLabel3.AutoSize = true;
-            this.blueTeamLabel3.Location = new System.Drawing.Point(433, 0);
+            this.blueTeamLabel3.Location = new System.Drawing.Point(446, 0);
             this.blueTeamLabel3.Name = "blueTeamLabel3";
-            this.blueTeamLabel3.Size = new System.Drawing.Size(55, 54);
+            this.blueTeamLabel3.Size = new System.Drawing.Size(42, 54);
             this.blueTeamLabel3.TabIndex = 13;
             this.blueTeamLabel3.Text = "Blue Team";
             this.blueTeamLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

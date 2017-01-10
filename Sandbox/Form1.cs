@@ -25,17 +25,9 @@ namespace Sandbox
 
         private async void Initialize()
         {
-            var t = Task.Run(() =>
-            {
-                populateStatsTableLabels();
-                statsTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            });
-
             await Manager.Initialize();
 
-            await t;
-            t = null;
-
+            Task t = null;
             if (Manager.WvwStats.GetHistoryMatch(0) != null)
                 t = Task.Run(() => updateStatsTable());
 
@@ -127,13 +119,12 @@ namespace Sandbox
 
             var statsUpdated = await statsUpdateTask;
 
-            var timerText = ( statsUpdated ? "59" : (Convert.ToInt32(timerLabel.Text) - 1).ToString());
-            SyncContext.Post(new SendOrPostCallback(o =>
-            {
-                timerLabel.Text = o.ToString();
-                timerLabel.Refresh();
-
-            }), timerText);
+            var timerText = ( statsUpdated ? "59" : (Convert.ToInt32(StatsTableControl.TimerSeconds) - 1).ToString());
+            StatsTableControl.TimerSeconds = timerText;
+            statsTableCurrent.updateTimerLabel();
+            statsTableTier1.updateTimerLabel();
+            statsTableTier2.updateTimerLabel();
+            statsTableTier3.updateTimerLabel();
 
             if (statsUpdated)
             {
@@ -166,92 +157,12 @@ namespace Sandbox
             Manager.updateSquad();
         }
 
-        private void populateStatsTableLabels()
-        {
-            var anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left);
-
-            var p = new Panel();
-            p.Anchor = anchor;
-            p.BackColor = System.Drawing.Color.Black;
-            p.Margin = Padding.Empty;
-            statsTable.Controls.Add(p, 1, 0);
-            statsTable.SetRowSpan(p, 17);
-
-            p = new Panel();
-            p.Anchor = anchor;
-            p.BackColor = System.Drawing.Color.Black;
-            p.Margin = Padding.Empty;
-            statsTable.Controls.Add(p, 5, 0);
-            statsTable.SetRowSpan(p, 17);
-
-            p = new Panel();
-            p.Anchor = anchor;
-            p.BackColor = System.Drawing.Color.Black;
-            p.Margin = Padding.Empty;
-            statsTable.Controls.Add(p, 9, 0);
-            statsTable.SetRowSpan(p, 17);
-
-            foreach (var r in new int[] { 1, 5, 9, 13 })
-            {
-                p = new Panel();
-                p.Anchor = anchor;
-                p.BackColor = System.Drawing.Color.Black;
-                p.Margin = Padding.Empty;
-                statsTable.Controls.Add(p, 0, r);
-
-                p = new Panel();
-                p.Anchor = anchor;
-                p.BackColor = System.Drawing.Color.Black;
-                p.Margin = Padding.Empty;
-                statsTable.Controls.Add(p, 2, r);
-                statsTable.SetColumnSpan(p, 3);
-
-                p = new Panel();
-                p.Anchor = anchor;
-                p.BackColor = System.Drawing.Color.Black;
-                p.Margin = Padding.Empty;
-                statsTable.Controls.Add(p, 6, r);
-                statsTable.SetColumnSpan(p, 3);
-
-                p = new Panel();
-                p.Anchor = anchor;
-                p.BackColor = System.Drawing.Color.Black;
-                p.Margin = Padding.Empty;
-                statsTable.Controls.Add(p, 10, r);
-                statsTable.SetColumnSpan(p, 3);
-            }
-
-            for (var r = 2; r <= 16; r++)
-                if (r != 5 && r != 9 && r != 13)
-                    for (var c = 2; c <= 12; c++)
-                    {
-                        if (c == 5 || c == 9)
-                            continue;
-
-                        var l = new Label();
-                        l.Text = $"{r}x{c}";
-                        l.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-                        l.Anchor = anchor;
-                        statsTable.Controls.Add(l, c, r);
-                    }
-        }
 
         private void updateStatsTableTeamsAndMaps()
         {
-            redTeamLabel.Text = Manager.WvwStats.GetWorldByTeam("Red") + "\nRed";
-            greenTeamLabel.Text = Manager.WvwStats.GetWorldByTeam("Green") + "\nGreen";
-            blueTeamLabel.Text = Manager.WvwStats.GetWorldByTeam("Blue") + "\nBlue";
-            redTeamLabel2.Text = Manager.WvwStats.GetWorldByTeam("Red") + "\nRed";
-            greenTeamLabel2.Text = Manager.WvwStats.GetWorldByTeam("Green") + "\nGreen";
-            blueTeamLabel2.Text = Manager.WvwStats.GetWorldByTeam("Blue") + "\nBlue";
-            redTeamLabel3.Text = Manager.WvwStats.GetWorldByTeam("Red") + "\nRed";
-            greenTeamLabel3.Text = Manager.WvwStats.GetWorldByTeam("Green") + "\nGreen";
-            blueTeamLabel3.Text = Manager.WvwStats.GetWorldByTeam("Blue") + "\nBlue";
-
-            redWorldLabel.Text = Manager.WvwStats.GetWorldByTeam("Red") + "BL\nRed";
-            greenWorldLabel.Text = Manager.WvwStats.GetWorldByTeam("Green") + "BL\nGreen";
-            blueWorldLabel.Text = Manager.WvwStats.GetWorldByTeam("Blue") + "BL\nBlue";
-
+            var current = Manager.WvwStats.CurrentMatchup;
+            statsTableCurrent.updateStatsTableTeamsAndMaps(current);
+ 
             var tier1 = Manager.WvwStats.GetMatchupFor("1-1");
             statsTableTier1.updateStatsTableTeamsAndMaps(tier1);
 
@@ -275,23 +186,7 @@ namespace Sandbox
             var delta5 = Manager.WvwStats.GetHistoryMatch(5);
             var delta10 = Manager.WvwStats.GetHistoryMatch(10);
             var delta15 = Manager.WvwStats.GetHistoryMatch(15);
-            var deltas = new Match[] { null, null, delta5, delta5, delta5, null, delta10, delta10, delta10, null, delta15, delta15, delta15 };
-
-            for (var r = 2; r <= 16; r++)
-                if (r != 5 && r != 9 && r != 13)
-                    for (var c = 2; c <= 12; c++)
-                        if (c != 5 && c != 9)
-                        {
-                            SyncContext.Post(new SendOrPostCallback(o =>
-                            {
-                                var n = (int)o;
-                                var r2 = n / 100;
-                                var c2 = n % 100;
-                                var l = ((Label)statsTable.GetControlFromPosition(c2, r2));
-                                l.Text = funcs[r2](match, deltas[c2], teams[c2], maps[r2]).ToString();
-                                l.Refresh();
-                            }), r*100+c);
-                        }
+            statsTableCurrent.updateStatsTable(match, delta5, delta10, delta15);
 
             var tier1 = Manager.WvwStats.GetMatchupFor("1-1");
             var tier1match = tier1.GetHistoryMatch(0);

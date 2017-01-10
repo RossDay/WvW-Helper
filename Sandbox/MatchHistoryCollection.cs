@@ -53,7 +53,7 @@ namespace Sandbox
         public string Map { get { return Getter.Map; } }
         public string OurTeam { get { return Getter.Team; } }
 
-        private MatchHistory CurrentHistory { get { return Matchups[CurrentMatchup]; } }
+        public MatchHistory CurrentHistory { get { return Matchups[CurrentMatchup]; } }
         public Dictionary<string, string> CurrentTeams { get { return CurrentHistory.CurrentTeams; } }
         public Dictionary<string, string> CurrentWorlds { get { return CurrentHistory.CurrentWorlds; } }
         public string LeftTeam { get { return CurrentHistory.LeftTeam; } }

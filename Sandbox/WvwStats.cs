@@ -43,6 +43,7 @@ namespace Sandbox
             return CurrentHistory.GetHistoryMatch(interval);
         }
 
+        public MatchHistory CurrentMatchup { get { return CurrentHistory.CurrentHistory; } }
         public MatchHistory GetMatchupFor(string matchupId)
         {
             return CurrentHistory.GetMatchupFor(matchupId);

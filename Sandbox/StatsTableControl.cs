@@ -16,6 +16,8 @@ namespace Sandbox
     {
         private SynchronizationContext SyncContext;
 
+        public static string TimerSeconds { get; set; }
+
         public StatsTableControl()
         {
             InitializeComponent();
@@ -24,6 +26,17 @@ namespace Sandbox
 
             populateStatsTableLabels();
             statsTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        }
+
+        public void updateTimerLabel()
+        {
+            var timerText = TimerSeconds.ToString();
+            SyncContext.Post(new SendOrPostCallback(o =>
+            {
+                timerLabel.Text = o.ToString();
+                timerLabel.Refresh();
+
+            }), timerText);
         }
 
         private void populateStatsTableLabels()

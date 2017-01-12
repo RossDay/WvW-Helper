@@ -24,34 +24,13 @@ namespace Sandbox
         public string RightTracking { get; private set; }
         public string TierTracking { get; private set; }
         public string CurrentMapDetails { get; private set; }
-        public string GetWorldByTeam(string team)
-        {
-            return CurrentHistory.GetWorldByTeam(team);
-        }
-        private Dictionary<string, string> CurrentWorlds { get { return CurrentHistory.CurrentWorlds; } }
-        private Dictionary<string, string> CurrentTeams { get { return CurrentHistory.CurrentTeams; } }
-        public string OurTeam { get { return Getter.Team; } }
-        public string LeftTeam { get { return CurrentHistory.LeftTeam; } }
-        public string RightTeam { get { return CurrentHistory.RightTeam; } }
-        public string OurWorld { get { return CurrentHistory.OurWorld; } }
-        public string LeftWorld { get { return CurrentHistory.LeftWorld; } }
-        public string RightWorld { get { return CurrentHistory.RightWorld; } }
 
-        private MatchHistoryCollection CurrentHistory;
-        public Match GetHistoryMatch(int interval)
-        {
-            return CurrentHistory.GetHistoryMatch(interval);
-        }
-
-        public MatchHistory CurrentMatchup { get { return CurrentHistory.CurrentHistory; } }
+        private MatchHistoryCollection _MatchHistoryCollection;
+        public MatchHistory CurrentMatchup { get { return _MatchHistoryCollection.CurrentHistory; } }
         public MatchHistory GetMatchupFor(string matchupId)
         {
-            return CurrentHistory.GetMatchupFor(matchupId);
+            return _MatchHistoryCollection.GetMatchupFor(matchupId);
         }
-
-        public DateTime LastUpdateTime { get { return CurrentHistory.LastUpdateTime; } }
-        public DateTime SkirmishTime { get { return CurrentHistory.SkirmishTime; } }
-        public DateTime TimezoneTime { get { return CurrentHistory.TimezoneTime; } }
 
         #region Constructor / Initialize
         public WvwStats(ITeamMapGetter getter, IniFile ini)
@@ -90,14 +69,14 @@ namespace Sandbox
 
         public async Task Initialize()
         {
-            CurrentHistory = await MatchHistoryCollection.CreateAsync();
-            CurrentHistory.Getter = this.Getter;
+            _MatchHistoryCollection = await MatchHistoryCollection.CreateAsync();
+            _MatchHistoryCollection.Getter = this.Getter;
         }
         #endregion
 
         public async Task<bool> maybeUpdateStats()
         {
-            var matchAdded = await CurrentHistory.maybeUpdate();
+            var matchAdded = await _MatchHistoryCollection.maybeUpdate();
             if (matchAdded)
             {
                 await writeStats();
@@ -108,18 +87,18 @@ namespace Sandbox
 
         public async Task<bool> setMatchup(string matchupId)
         {
-            if (CurrentHistory.CurrentMatchup.Equals(matchupId))
+            if (_MatchHistoryCollection.CurrentMatchup.Equals(matchupId))
                 return false;
 
-            CurrentHistory.CurrentMatchup = matchupId;
+            _MatchHistoryCollection.CurrentMatchup = matchupId;
             await writeStats();
 
-            Ini.Write("OurWorld", CurrentHistory.OurWorld, "GW2");
-            Ini.Write("LeftWorld", CurrentHistory.LeftWorld, "GW2");
-            Ini.Write("RightWorld", CurrentHistory.RightWorld, "GW2");
-            Ini.Write("RedWorld", CurrentHistory.GetWorldByTeam("Red"), "GW2");
-            Ini.Write("GreenWorld", CurrentHistory.GetWorldByTeam("Green"), "GW2");
-            Ini.Write("BlueWorld", CurrentHistory.GetWorldByTeam("Blue"), "GW2");
+            Ini.Write("OurWorld", CurrentMatchup.OurWorld, "GW2");
+            Ini.Write("LeftWorld", CurrentMatchup.LeftWorld, "GW2");
+            Ini.Write("RightWorld", CurrentMatchup.RightWorld, "GW2");
+            Ini.Write("RedWorld", CurrentMatchup.GetWorldByTeam("Red"), "GW2");
+            Ini.Write("GreenWorld", CurrentMatchup.GetWorldByTeam("Green"), "GW2");
+            Ini.Write("BlueWorld", CurrentMatchup.GetWorldByTeam("Blue"), "GW2");
 
             return true;
         }
@@ -145,8 +124,8 @@ namespace Sandbox
                     }
                 }
                 writeOurMapRatioMessages();
-                LeftTracking = writeTeamTracking(CurrentHistory.LeftTeam);
-                RightTracking = writeTeamTracking(CurrentHistory.RightTeam);
+                LeftTracking = writeTeamTracking(CurrentMatchup.LeftTeam);
+                RightTracking = writeTeamTracking(CurrentMatchup.RightTeam);
                 writeTierTracking();
             });
         }
@@ -154,26 +133,26 @@ namespace Sandbox
         #region Writing OurStats
         private void writeKillDeathStats(int interval)
         {
-            var currentMatch = CurrentHistory.GetHistoryMatch(0);
+            var currentMatch = CurrentMatchup.GetHistoryMatch(0);
 
             Match deltaMatch = null;
             var intervalKey = "0";
             var intervalDesc = "Total";
             if (interval > 0)
             {
-                deltaMatch = CurrentHistory.GetHistoryMatch(interval);
+                deltaMatch = CurrentMatchup.GetHistoryMatch(interval);
                 intervalKey = interval.ToString();
                 intervalDesc = "Last " + intervalKey + "m";
             }
             else if (interval == -1)
             {
-                deltaMatch = CurrentHistory.SkirmishMatch;
+                deltaMatch = CurrentMatchup.SkirmishMatch;
                 intervalKey = "Skirmish";
                 intervalDesc = "Skirmish";
             }
             else if (interval == -2)
             {
-                deltaMatch = CurrentHistory.TimezoneMatch;
+                deltaMatch = CurrentMatchup.TimezoneMatch;
                 intervalKey = "Timezone";
                 intervalDesc = "Timezone";
             }
@@ -194,16 +173,16 @@ namespace Sandbox
                 }
                 else
                 {
-                    builder.Append(CurrentWorlds[map]).Append("BL");
-                    key = CurrentTeams[map];
+                    builder.Append(CurrentMatchup.CurrentWorlds[map]).Append("BL");
+                    key = CurrentMatchup.CurrentTeams[map];
                 }
                 builder.Append(" ");
                 builder.Append(intervalDesc);
                 builder.Append(" Stats for ");
-                builder.Append(OurWorld).Append(": Kills = ");
-                builder.Append(currentMatch.GetDeltaKillsFor(deltaMatch, OurTeam, map));
+                builder.Append(CurrentMatchup.OurWorld).Append(": Kills = ");
+                builder.Append(currentMatch.GetDeltaKillsFor(deltaMatch, CurrentMatchup.OurTeam, map));
                 builder.Append(", Deaths = ");
-                builder.Append(currentMatch.GetDeltaDeathsFor(deltaMatch, OurTeam, map));
+                builder.Append(currentMatch.GetDeltaDeathsFor(deltaMatch, CurrentMatchup.OurTeam, map));
 
                 var msg = builder.ToString();
                 builder.Clear();
@@ -216,26 +195,26 @@ namespace Sandbox
         #region Writing Ratios
         private void writeRatioMessages(int interval)
         {
-            var currentMatch = CurrentHistory.GetHistoryMatch(0);
+            var currentMatch = CurrentMatchup.GetHistoryMatch(0);
 
             Match deltaMatch = null;
             var intervalKey = "0";
             var intervalDesc = "Total";
             if (interval > 0)
             {
-                deltaMatch = CurrentHistory.GetHistoryMatch(interval);
+                deltaMatch = CurrentMatchup.GetHistoryMatch(interval);
                 intervalKey = interval.ToString();
                 intervalDesc = "Last " + intervalKey + "m";
             }
             else if (interval == -1)
             {
-                deltaMatch = CurrentHistory.SkirmishMatch;
+                deltaMatch = CurrentMatchup.SkirmishMatch;
                 intervalKey = "Skirmish";
                 intervalDesc = "Skirmish";
             }
             else if (interval == -2)
             {
-                deltaMatch = CurrentHistory.TimezoneMatch;
+                deltaMatch = CurrentMatchup.TimezoneMatch;
                 intervalKey = "Timezone";
                 intervalDesc = "Timezone";
             }
@@ -256,20 +235,20 @@ namespace Sandbox
                 }
                 else
                 {
-                    builder.Append(CurrentWorlds[map]).Append("BL");
-                    key = CurrentTeams[map];
+                    builder.Append(CurrentMatchup.CurrentWorlds[map]).Append("BL");
+                    key = CurrentMatchup.CurrentTeams[map];
                 }
                 builder.Append(" ");
                 builder.Append(intervalDesc);
                 builder.Append(" KDR: ");
-                builder.Append(OurWorld).Append(" = ");
-                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, OurTeam, map));
+                builder.Append(CurrentMatchup.OurWorld).Append(" = ");
+                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, CurrentMatchup.OurTeam, map));
                 builder.Append(", ");
-                builder.Append(LeftWorld).Append(" = ");
-                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, LeftTeam, map));
+                builder.Append(CurrentMatchup.LeftWorld).Append(" = ");
+                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, CurrentMatchup.LeftTeam, map));
                 builder.Append(", ");
-                builder.Append(RightWorld).Append(" = ");
-                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, RightTeam, map));
+                builder.Append(CurrentMatchup.RightWorld).Append(" = ");
+                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, CurrentMatchup.RightTeam, map));
 
                 var msg = builder.ToString();
                 builder.Clear();
@@ -280,32 +259,32 @@ namespace Sandbox
 
         private void writeOurDeltaRatioMessages(int interval)
         {
-            var currentMatch = CurrentHistory.GetHistoryMatch(0);
+            var currentMatch = CurrentMatchup.GetHistoryMatch(0);
             //var deltaMatch = (interval == 0 ? null : GetHistoryMatch(interval));
             Match deltaMatch = null;
             var intervalKey = "0";
             var intervalDesc = "Total";
             if (interval > 0)
             {
-                deltaMatch = CurrentHistory.GetHistoryMatch(interval);
+                deltaMatch = CurrentMatchup.GetHistoryMatch(interval);
                 intervalKey = interval.ToString();
                 intervalDesc = "Last " + intervalKey + "m";
             }
             else if (interval == -1)
             {
-                deltaMatch = CurrentHistory.SkirmishMatch;
+                deltaMatch = CurrentMatchup.SkirmishMatch;
                 intervalKey = "Skirmish";
                 intervalDesc = "Skirmish";
             }
             else if (interval == -2)
             {
-                deltaMatch = CurrentHistory.TimezoneMatch;
+                deltaMatch = CurrentMatchup.TimezoneMatch;
                 intervalKey = "Timezone";
                 intervalDesc = "Timezone";
             }
 
             var builder = new StringBuilder();
-            builder.Append(OurWorld).Append(" ");
+            builder.Append(CurrentMatchup.OurWorld).Append(" ");
             builder.Append(intervalDesc);
             builder.Append(" KDR: ");
             foreach (string map in MapList)
@@ -315,9 +294,9 @@ namespace Sandbox
                 else if (map.Equals("EBG"))
                     builder.Append("EBG");
                 else
-                    builder.Append(CurrentWorlds[map]).Append("BL");
+                    builder.Append(CurrentMatchup.CurrentWorlds[map]).Append("BL");
                 builder.Append(" = ");
-                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, OurTeam, map));
+                builder.Append(currentMatch.GetDeltaKDR(deltaMatch, CurrentMatchup.OurTeam, map));
                 builder.Append(", ");
             }
             builder.Length -= 2;
@@ -330,12 +309,12 @@ namespace Sandbox
 
         private void writeOurMapRatioMessages()
         {
-            var currentMatch = CurrentHistory.GetHistoryMatch(0);
+            var currentMatch = CurrentMatchup.GetHistoryMatch(0);
 
             var builder = new StringBuilder();
             foreach (string map in MapList)
             {
-                builder.Append(OurWorld).Append(" KDR on ");
+                builder.Append(CurrentMatchup.OurWorld).Append(" KDR on ");
                 var key = "";
                 if (map == null)
                 {
@@ -349,8 +328,8 @@ namespace Sandbox
                 }
                 else
                 {
-                    builder.Append(CurrentWorlds[map]).Append("BL");
-                    key = CurrentTeams[map];
+                    builder.Append(CurrentMatchup.CurrentWorlds[map]).Append("BL");
+                    key = CurrentMatchup.CurrentTeams[map];
                 }
                 builder.Append(": ");
                 foreach (var interval in Intervals)
@@ -363,23 +342,23 @@ namespace Sandbox
                     var intervalDesc = "Total";
                     if (interval > 0)
                     {
-                        deltaMatch = CurrentHistory.GetHistoryMatch(interval);
+                        deltaMatch = CurrentMatchup.GetHistoryMatch(interval);
                         intervalDesc = interval.ToString() + "m";
                     }
                     else if (interval == -1)
                     {
-                        deltaMatch = CurrentHistory.SkirmishMatch;
+                        deltaMatch = CurrentMatchup.SkirmishMatch;
                         intervalDesc = "Skirmish";
                     }
                     else if (interval == -2)
                     {
-                        deltaMatch = CurrentHistory.TimezoneMatch;
+                        deltaMatch = CurrentMatchup.TimezoneMatch;
                         intervalDesc = "Timezone";
                     }
 
                     builder.Append(intervalDesc);
                     builder.Append(" = ");
-                    builder.Append(currentMatch.GetDeltaKDR(deltaMatch, OurTeam, map));
+                    builder.Append(currentMatch.GetDeltaKDR(deltaMatch, CurrentMatchup.OurTeam, map));
                     builder.Append(", ");
                 }
                 builder.Length -= 2;
@@ -392,6 +371,7 @@ namespace Sandbox
         }
         #endregion
 
+        #region Writing Tier Tracking
         private void writeTierTracking()
         {
             var builder = new StringBuilder();
@@ -401,7 +381,7 @@ namespace Sandbox
             for (var tier = 1; tier <= 3; tier++)
             {
                 builder.Append("Tier ").AppendLine(tier.ToString()).AppendLine("-----------------------------");
-                var m = CurrentHistory.GetMatchupFor("1-"+tier.ToString());
+                var m = _MatchHistoryCollection.GetMatchupFor("1-" + tier.ToString());
                 currentMatch = m.GetHistoryMatch(0);
                 deltaMatch = m.GetHistoryMatch(10);
                 foreach (string map in MapList)
@@ -428,6 +408,9 @@ namespace Sandbox
             TierTracking = builder.ToString();
         }
 
+        #endregion
+
+        #region Writing Tracking
         private String GetObjectiveShortName(string objectiveId)
         {
             Objective o;
@@ -436,16 +419,15 @@ namespace Sandbox
             return objectiveId;
         }
 
-        #region Writing Tracking
         private static string[] TrackedObjectiveTypes = new string[] { "Castle", "Keep", "Tower", "Camp" };
         private string writeTeamTracking(string team)
         {
-            var match = CurrentHistory.GetHistoryMatch(0);
-            var delta = CurrentHistory.GetHistoryMatch(10);
+            var match = CurrentMatchup.GetHistoryMatch(0);
+            var delta = CurrentMatchup.GetHistoryMatch(10);
             var result = new StringBuilder();
 
-            result.Append("Tracking " + CurrentWorlds[team] + " with 10m stats...");
-            Ini.Write(CurrentTeams[team] + "1", "\"" + result.ToString() + "\"", "WVWTracking");
+            result.Append("Tracking " + CurrentMatchup.CurrentWorlds[team] + " with 10m stats...");
+            Ini.Write(CurrentMatchup.CurrentTeams[team] + "1", "\"" + result.ToString() + "\"", "WVWTracking");
             result.AppendLine();
 
             var i = 2;
@@ -457,7 +439,7 @@ namespace Sandbox
                     .OrderByDescending(o => Convert.ToDateTime(o.LastFlipped))
                     .Take(3).ToList();
 
-                var mapName = (map.Equals("EBG") ? map : CurrentWorlds[map] + "BL");
+                var mapName = (map.Equals("EBG") ? map : CurrentMatchup.CurrentWorlds[map] + "BL");
 
                 var kills = match.GetDeltaKillsFor(delta, team, map);
                 var deaths = match.GetDeltaDeathsFor(delta, team, map);
@@ -482,7 +464,7 @@ namespace Sandbox
                 }
                 result.AppendLine(s.ToString());
 
-                Ini.Write(CurrentTeams[team] + (i++).ToString(), "\"" + s.ToString() + "\"", "WVWTracking");
+                Ini.Write(CurrentMatchup.CurrentTeams[team] + (i++).ToString(), "\"" + s.ToString() + "\"", "WVWTracking");
             }
 
             return result.ToString();
@@ -492,25 +474,25 @@ namespace Sandbox
         #region Writing MapDetails
         private string writeMapDetailStats(string map, int interval)
         {
-            var match = CurrentHistory.GetHistoryMatch(0);
+            var match = CurrentMatchup.GetHistoryMatch(0);
             Match delta = null;
             var intervalKey = "0";
             var intervalDesc = "Total";
             if (interval > 0)
             {
-                delta = CurrentHistory.GetHistoryMatch(interval);
+                delta = CurrentMatchup.GetHistoryMatch(interval);
                 intervalKey = interval.ToString();
                 intervalDesc = "Last " + intervalKey + "m";
             }
             else if (interval == -1)
             {
-                delta = CurrentHistory.SkirmishMatch;
+                delta = CurrentMatchup.SkirmishMatch;
                 intervalKey = "Skirmish";
                 intervalDesc = "Skirmish";
             }
             else if (interval == -2)
             {
-                delta = CurrentHistory.TimezoneMatch;
+                delta = CurrentMatchup.TimezoneMatch;
                 intervalKey = "Timezone";
                 intervalDesc = "Timezone";
             }
@@ -534,8 +516,8 @@ namespace Sandbox
             }
             else
             {
-                key = CurrentTeams[map];
-                mapName = CurrentWorlds[map] + "BL";
+                key = CurrentMatchup.CurrentTeams[map];
+                mapName = CurrentMatchup.CurrentWorlds[map] + "BL";
                 mapObjName = map + "Home";
             }
 
@@ -557,7 +539,7 @@ namespace Sandbox
                 var deaths = match.GetDeltaDeathsFor(delta, team, map);
 
                 var s = new StringBuilder();
-                s.Append(CurrentWorlds[team])
+                s.Append(CurrentMatchup.CurrentWorlds[team])
                     .Append(": K=")
                     .Append(kills)
                     .Append(", D=")

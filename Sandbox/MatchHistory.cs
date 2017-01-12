@@ -112,12 +112,10 @@ namespace Sandbox
                 SkirmishMatch = match;
                 TimezoneTime = now;
                 TimezoneMatch = match;
+                await t;
             }
             else
                 needToSerialize = await maybeAdd(match);
-
-            if (t != null)
-                await t;
 
             if (needToSerialize)
             {

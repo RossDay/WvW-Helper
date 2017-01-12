@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
@@ -10,7 +9,7 @@ using GW2NET.WorldVersusWorld;
 namespace Sandbox
 {
     [DataContract]
-    class MatchHistoryCollection : IEnumerable<KeyValuePair<DateTime, Match>>, ITeamMapGetter
+    class MatchHistoryCollection : ITeamMapGetter
     {
         public static string APIStatus { get; private set; } = "N/A";
         private GW2Bootstrapper GW2 = new GW2Bootstrapper();
@@ -18,6 +17,28 @@ namespace Sandbox
         private Dictionary<string, MatchHistory> Matchups;
         [DataMember]
         public string CurrentMatchup { get; set; }
+
+        public MatchHistoryCollection()
+        {
+            Matchups = new Dictionary<string, MatchHistory>();
+            Matchups.Add("1-1", new MatchHistory(this, "1-1"));
+            Matchups.Add("1-2", new MatchHistory(this, "1-2"));
+            Matchups.Add("1-3", new MatchHistory(this, "1-3"));
+            CurrentMatchup = "1-2";
+        }
+
+        public ITeamMapGetter Getter { get; set; }
+        public string Team { get { return Getter.Team; } }
+        public string Map { get { return Getter.Map; } }
+
+        public MatchHistory CurrentHistory
+        {
+            get { return Matchups[CurrentMatchup]; }
+        }
+        public MatchHistory GetMatchupFor(string matchupId)
+        {
+            return Matchups[matchupId];
+        }
 
         private async Task<Match> GetCurrentMatchFor(string matchupId)
         {
@@ -34,49 +55,7 @@ namespace Sandbox
             }
         }
 
-        public MatchHistory GetMatchupFor(string matchupId)
-        {
-            return Matchups[matchupId];
-        }
-
-        public MatchHistoryCollection()
-        {
-            Matchups = new Dictionary<string, MatchHistory>();
-            Matchups.Add("1-1", new MatchHistory(this, "1-1"));
-            Matchups.Add("1-2", new MatchHistory(this, "1-2"));
-            Matchups.Add("1-3", new MatchHistory(this, "1-3"));
-            CurrentMatchup = "1-2";
-        }
-
-        public ITeamMapGetter Getter { get; set; }
-        public string Team { get { return Getter.Team; } }
-        public string Map { get { return Getter.Map; } }
-        public string OurTeam { get { return Getter.Team; } }
-
-        public MatchHistory CurrentHistory { get { return Matchups[CurrentMatchup]; } }
-        public Dictionary<string, string> CurrentTeams { get { return CurrentHistory.CurrentTeams; } }
-        public Dictionary<string, string> CurrentWorlds { get { return CurrentHistory.CurrentWorlds; } }
-        public string LeftTeam { get { return CurrentHistory.LeftTeam; } }
-        public string RightTeam { get { return CurrentHistory.RightTeam; } }
-        public string OurWorld { get { return CurrentHistory.OurWorld; } }
-        public string LeftWorld { get { return CurrentHistory.LeftWorld; } }
-        public string RightWorld { get { return CurrentHistory.RightWorld; } }
-        public DateTime LastUpdateTime { get { return CurrentHistory.LastUpdateTime; } }
-        public DateTime SkirmishTime { get { return CurrentHistory.SkirmishTime; } }
-        public DateTime TimezoneTime { get { return CurrentHistory.TimezoneTime; } }
-        public Match SkirmishMatch { get { return CurrentHistory.SkirmishMatch; } }
-        public Match TimezoneMatch { get { return CurrentHistory.TimezoneMatch; } }
-
-        public Match GetHistoryMatch(int interval)
-        {
-            return CurrentHistory.GetHistoryMatch(interval);
-        }
-
-        public string GetWorldByTeam(string team)
-        {
-            return CurrentHistory.GetWorldByTeam(team);
-        }
-
+        #region Update / Clear
         private Task SerializerTask = null;
         public async Task<bool> maybeUpdate()
         {
@@ -128,7 +107,8 @@ namespace Sandbox
                 kv.Value.Clear();
             if (File.Exists(MATCH_HISTORY_FILE))
                 File.Delete(MATCH_HISTORY_FILE);
-        }
+        } 
+        #endregion
 
         #region Serialization
         public static readonly string MATCH_HISTORY_FILE = "C:\\rday\\wvwhistory.dat";
@@ -171,15 +151,5 @@ namespace Sandbox
             }
         } 
         #endregion
-
-        public IEnumerator<KeyValuePair<DateTime, Match>> GetEnumerator()
-        {
-            return CurrentHistory.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
     }
 }

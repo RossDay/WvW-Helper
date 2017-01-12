@@ -28,7 +28,7 @@ namespace Sandbox
             await Manager.Initialize();
 
             Task t = null;
-            if (Manager.WvwStats.GetHistoryMatch(0) != null)
+            if (Manager.WvwStats.CurrentMatchup.GetHistoryMatch(0) != null)
                 t = Task.Run(() => updateStatsTable());
 
             updateStatsTableTeamsAndMaps();
@@ -138,9 +138,9 @@ namespace Sandbox
 
         private void updateTrackingTab()
         {
-            trackingLabel.Text = "Last Update: " + Manager.WvwStats.LastUpdateTime.ToString("yyyyMMdd HH:mm:ss") + "\n" 
-                + "Skirmish Started: " + Manager.WvwStats.SkirmishTime.ToString("yyyyMMdd HH:mm:ss") + "\n"
-                + "Timezone Started: " + Manager.WvwStats.TimezoneTime.ToString("yyyyMMdd HH:mm:ss") + "\n" 
+            trackingLabel.Text = "Last Update: " + Manager.WvwStats.CurrentMatchup.LastUpdateTime.ToString("yyyyMMdd HH:mm:ss") + "\n" 
+                + "Skirmish Started: " + Manager.WvwStats.CurrentMatchup.SkirmishTime.ToString("yyyyMMdd HH:mm:ss") + "\n"
+                + "Timezone Started: " + Manager.WvwStats.CurrentMatchup.TimezoneTime.ToString("yyyyMMdd HH:mm:ss") + "\n" 
                 + "API Status: " + Manager.WvwStats.APIStatus + "\n\n"
                 + Manager.WvwStats.LeftTracking + "\n\n" 
                 + Manager.WvwStats.RightTracking + "\n\n" 
@@ -182,10 +182,10 @@ namespace Sandbox
 
         private void updateStatsTable()
         {
-            var match = Manager.WvwStats.GetHistoryMatch(0);
-            var delta5 = Manager.WvwStats.GetHistoryMatch(5);
-            var delta10 = Manager.WvwStats.GetHistoryMatch(10);
-            var delta15 = Manager.WvwStats.GetHistoryMatch(15);
+            var match = Manager.WvwStats.CurrentMatchup.GetHistoryMatch(0);
+            var delta5 = Manager.WvwStats.CurrentMatchup.GetHistoryMatch(5);
+            var delta10 = Manager.WvwStats.CurrentMatchup.GetHistoryMatch(10);
+            var delta15 = Manager.WvwStats.CurrentMatchup.GetHistoryMatch(15);
             statsTableCurrent.updateStatsTable(match, delta5, delta10, delta15);
 
             var tier1 = Manager.WvwStats.GetMatchupFor("1-1");
